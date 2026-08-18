@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { Avatar } from './ui'
-import { LogOut } from 'lucide-react'
+import { LogOut, Clock } from 'lucide-react'
 
 const ROLE_LABELS = {
   reception: 'Resepşn',
@@ -16,6 +16,7 @@ const ROLE_LABELS = {
 export default function Layout({ children }) {
   const { employee, logout } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   function handleLogout() {
     logout()
@@ -35,13 +36,24 @@ export default function Layout({ children }) {
               <div className="text-[15px] font-semibold text-ink leading-tight">{employee?.full_name}</div>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 text-sm text-ink/50 hover:text-danger transition-colors"
-          >
-            <LogOut size={15} />
-            Çıxış
-          </button>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/attendance"
+              className={`flex items-center gap-1.5 text-sm transition-colors ${
+                location.pathname === '/attendance' ? 'text-primary font-medium' : 'text-ink/50 hover:text-ink'
+              }`}
+            >
+              <Clock size={15} />
+              <span className="hidden sm:inline">Davamiyyət</span>
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1.5 text-sm text-ink/50 hover:text-danger transition-colors"
+            >
+              <LogOut size={15} />
+              <span className="hidden sm:inline">Çıxış</span>
+            </button>
+          </div>
         </div>
       </header>
       <main className="max-w-5xl mx-auto px-5 py-6">{children}</main>

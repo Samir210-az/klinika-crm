@@ -4,6 +4,7 @@ import { Card, StatCard } from '../components/ui'
 import EmployeesPanel from '../components/EmployeesPanel'
 import PatientsPanel from '../components/PatientsPanel'
 import EmployeeDetail from '../components/EmployeeDetail'
+import AttendanceAdmin from '../components/AttendanceAdmin'
 import { Wallet, CalendarClock, Users, Stethoscope } from 'lucide-react'
 
 export default function AdminDashboard() {
@@ -25,11 +26,13 @@ export default function AdminDashboard() {
         <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
         <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
         <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
+        <TabButton active={tab === 'attendance'} onClick={() => setTab('attendance')}>Davamiyyət</TabButton>
       </div>
 
       {tab === 'stats' && <StatsView onSelectDoctor={setViewDoctorId} />}
       {tab === 'employees' && <EmployeesPanel />}
       {tab === 'patients' && <PatientsPanel />}
+      {tab === 'attendance' && <AttendanceAdmin />}
     </div>
   )
 }

@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
+import Kiosk from './pages/Kiosk'
+import MyAttendance from './pages/MyAttendance'
 import ReceptionDashboard from './pages/ReceptionDashboard'
 import DoctorDashboard from './pages/DoctorDashboard'
 import NurseDashboard from './pages/NurseDashboard'
@@ -31,6 +33,16 @@ function Home() {
   )
 }
 
+function AttendanceRoute() {
+  const { isAuthed } = useAuth()
+  if (!isAuthed) return <Navigate to="/login" replace />
+  return (
+    <Layout>
+      <MyAttendance />
+    </Layout>
+  )
+}
+
 function LoginRoute() {
   const { isAuthed } = useAuth()
   if (isAuthed) return <Navigate to="/" replace />
@@ -43,6 +55,8 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginRoute />} />
+          <Route path="/kiosk" element={<Kiosk />} />
+          <Route path="/attendance" element={<AttendanceRoute />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </AuthProvider>
