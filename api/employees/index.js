@@ -43,8 +43,8 @@ export default async function handler(req, res) {
     if (!full_name || !phone || !pin || !role) {
       return res.status(400).json({ error: 'Ad, telefon, PIN və rol tələb olunur.' })
     }
-    if (!/^\d{4,6}$/.test(pin)) {
-      return res.status(400).json({ error: 'PIN 4-6 rəqəmdən ibarət olmalıdır.' })
+    if (!/^[A-Za-z0-9]{4,12}$/.test(pin)) {
+      return res.status(400).json({ error: 'PIN 4-12 simvoldan ibarət olmalıdır (hərf/rəqəm).' })
     }
     const validRoles = ['reception', 'doctor', 'nurse', 'accountant', 'hr', 'director']
     if (!validRoles.includes(role)) {

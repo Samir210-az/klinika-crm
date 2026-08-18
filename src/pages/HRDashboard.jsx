@@ -119,7 +119,7 @@ function NewEmployeeForm({ doctors, onClose, onCreated }) {
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-3">
-          <input required maxLength={6} inputMode="numeric" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))} placeholder="PIN (4-6 rəqəm)" className="rounded-lg border border-black/10 px-3 py-2 text-sm" />
+          <input required maxLength={12} value={pin} onChange={(e) => setPin(e.target.value)} placeholder="PIN (4-12 simvol)" className="rounded-lg border border-black/10 px-3 py-2 text-sm" />
           <select value={role} onChange={(e) => setRole(e.target.value)} className="rounded-lg border border-black/10 px-3 py-2 text-sm">
             {Object.entries(ROLE_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
           </select>

@@ -52,12 +52,11 @@ export default function Login() {
           <input
             type="password"
             required
-            inputMode="numeric"
-            maxLength={6}
+            maxLength={12}
             value={pin}
-            onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-            placeholder="••••"
-            className="w-full rounded-xl border border-black/10 bg-surface px-4 py-3 mb-6 tracking-[0.4em] text-ink outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"
+            onChange={(e) => setPin(e.target.value)}
+            placeholder="PIN"
+            className="w-full rounded-xl border border-black/10 bg-surface px-4 py-3 mb-6 tracking-[0.2em] text-ink outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"
           />
 
           {error && (
