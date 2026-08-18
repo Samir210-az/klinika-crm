@@ -8,12 +8,19 @@ export function Card({ children, className = '', ...props }) {
 
 export function StatCard({ label, value, sublabel, icon: Icon }) {
   return (
-    <Card className="relative overflow-hidden">
-      {Icon && <Icon size={18} className="absolute top-5 right-5 text-primary/30" strokeWidth={1.75} />}
-      <div className="text-xs font-medium uppercase tracking-wide text-ink/60 mb-2">{label}</div>
-      <div className="font-display text-3xl font-semibold text-ink tabular-nums">{value}</div>
-      {sublabel && <div className="text-xs text-ink/60 mt-1">{sublabel}</div>}
-    </Card>
+    <div className="relative overflow-hidden rounded-2xl bg-primary text-white p-5 shadow-[0_8px_24px_-12px_rgba(31,95,91,0.5)]">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60"
+        style={{
+          background:
+            'radial-gradient(120% 90% at 100% 0%, rgba(255,255,255,0.14), transparent 55%), radial-gradient(90% 70% at 0% 100%, rgba(0,0,0,0.18), transparent 60%)',
+        }}
+      />
+      {Icon && <Icon size={18} className="absolute top-5 right-5 text-white/50" strokeWidth={1.75} />}
+      <div className="relative text-xs font-medium uppercase tracking-wide text-white/70 mb-2">{label}</div>
+      <div className="relative font-display text-3xl font-semibold tabular-nums">{value}</div>
+      {sublabel && <div className="relative text-xs text-white/60 mt-1">{sublabel}</div>}
+    </div>
   )
 }
 
