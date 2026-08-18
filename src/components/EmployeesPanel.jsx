@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState } from '../components/ui'
+import { Card, Button, EmptyState } from './ui'
 
 const ROLE_LABELS = {
   reception: 'Resepşn',
@@ -11,7 +11,7 @@ const ROLE_LABELS = {
   director: 'Direktor',
 }
 
-export default function HRDashboard() {
+export default function EmployeesPanel() {
   const [employees, setEmployees] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)

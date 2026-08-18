@@ -1,8 +1,39 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
 import { Card } from '../components/ui'
+import EmployeesPanel from '../components/EmployeesPanel'
+import { useAuth } from '../context/AuthContext'
 
-export default function DirectorDashboard() {
+export default function AdminDashboard() {
+  const { employee } = useAuth()
+  const [tab, setTab] = useState('stats')
+
+  return (
+    <div>
+      <div className="flex gap-2 mb-6 border-b border-black/10">
+        <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
+        <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
+      </div>
+
+      {tab === 'stats' ? <StatsView showFullTotals={employee.role === 'director' || employee.role === 'accountant'} /> : <EmployeesPanel />}
+    </div>
+  )
+}
+
+function TabButton({ active, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-1 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
+        active ? 'border-primary text-primary' : 'border-transparent text-ink/40 hover:text-ink/70'
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
+
+function StatsView() {
   const [stats, setStats] = useState(null)
   const [employeeCount, setEmployeeCount] = useState(null)
 
@@ -13,8 +44,6 @@ export default function DirectorDashboard() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-ink mb-5">Ümumi göstəricilər</h1>
-
       <div className="grid grid-cols-2 gap-3 mb-6">
         <Card>
           <div className="text-sm text-ink/50 mb-1">Bugünkü dövriyyə</div>

@@ -6,16 +6,15 @@ import ReceptionDashboard from './pages/ReceptionDashboard'
 import DoctorDashboard from './pages/DoctorDashboard'
 import NurseDashboard from './pages/NurseDashboard'
 import AccountantDashboard from './pages/AccountantDashboard'
-import HRDashboard from './pages/HRDashboard'
-import DirectorDashboard from './pages/DirectorDashboard'
+import AdminDashboard from './pages/AdminDashboard'
 
 const DASHBOARDS = {
   reception: ReceptionDashboard,
   doctor: DoctorDashboard,
   nurse: NurseDashboard,
   accountant: AccountantDashboard,
-  hr: HRDashboard,
-  director: DirectorDashboard,
+  hr: AdminDashboard,
+  director: AdminDashboard,
 }
 
 function Home() {
