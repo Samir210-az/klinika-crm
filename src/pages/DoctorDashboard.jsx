@@ -186,39 +186,51 @@ function VisitDetail({ appointment, onBack }) {
 
       <div className="flex gap-1 mb-4 border-b border-black/10">
         <TabButton active={tab === 'diagnosis'} onClick={() => setTab('diagnosis')}>Diaqnoz</TabButton>
+        <TabButton active={tab === 'lab'} onClick={() => setTab('lab')}>
+          Laboratoriya
+          {pendingLab.length > 0 && <span className="ml-1.5 text-warning">●</span>}
+          {completedLab.length > 0 && pendingLab.length === 0 && <span className="ml-1.5 text-success">●</span>}
+        </TabButton>
         <TabButton active={tab === 'prescription'} onClick={() => setTab('prescription')}>Resept</TabButton>
       </div>
 
       {error && <p className="text-danger text-sm mb-3">{error}</p>}
 
       {tab === 'diagnosis' && (
-        <>
-          <Card className="mb-4">
-            <label className="block text-sm font-medium text-ink/80 mb-1.5">Diaqnoz</label>
-            <textarea value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
-            <label className="block text-sm font-medium text-ink/80 mb-1.5">Qeydlər</label>
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
-            <Button variant="secondary" onClick={saveDiagnosis} disabled={saving}>Yadda saxla</Button>
-          </Card>
+        <Card className="mb-4">
+          <label className="block text-sm font-medium text-ink/80 mb-1.5">Diaqnoz</label>
+          <textarea value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
+          <label className="block text-sm font-medium text-ink/80 mb-1.5">Qeydlər</label>
+          <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
+          <Button variant="secondary" onClick={saveDiagnosis} disabled={saving}>Yadda saxla</Button>
+        </Card>
+      )}
 
-          <Card className="mb-4">
-            <div className="flex items-center gap-2 mb-3">
-              <FlaskConical size={16} className="text-primary" />
-              <h3 className="font-medium text-ink">Laboratoriya</h3>
+      {tab === 'lab' && (
+        <Card className="mb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <FlaskConical size={16} className="text-primary" />
+            <h3 className="font-medium text-ink">Laborator nəticələri</h3>
+          </div>
+
+          {completedLab.length === 0 && pendingLab.length === 0 && (
+            <p className="text-sm text-ink/40 mb-3">Hələ analiz təyin edilməyib.</p>
+          )}
+
+          {completedLab.map((o) => (
+            <div key={o.id} className="mb-3 rounded-lg bg-success/5 border border-success/15 px-3 py-2.5">
+              <div className="text-xs font-medium text-success mb-1">Nəticə hazırdır — {o.tests}</div>
+              <p className="text-sm text-ink whitespace-pre-wrap">{o.results}</p>
             </div>
+          ))}
+          {pendingLab.map((o) => (
+            <div key={o.id} className="mb-3 rounded-lg bg-warning/5 border border-warning/15 px-3 py-2.5 text-sm text-warning">
+              Gözlənilir: {o.tests}
+            </div>
+          ))}
 
-            {completedLab.map((o) => (
-              <div key={o.id} className="mb-3 rounded-lg bg-success/5 border border-success/15 px-3 py-2.5">
-                <div className="text-xs font-medium text-success mb-1">Nəticə hazırdır — {o.tests}</div>
-                <p className="text-sm text-ink whitespace-pre-wrap">{o.results}</p>
-              </div>
-            ))}
-            {pendingLab.map((o) => (
-              <div key={o.id} className="mb-3 rounded-lg bg-warning/5 border border-warning/15 px-3 py-2.5 text-sm text-warning">
-                Gözlənilir: {o.tests}
-              </div>
-            ))}
-
+          <div className="border-t border-black/5 pt-3 mt-3">
+            <label className="block text-sm font-medium text-ink/80 mb-1.5">Yeni analiz təyin et</label>
             <textarea
               value={labTests}
               onChange={(e) => setLabTests(e.target.value)}
@@ -227,8 +239,8 @@ function VisitDetail({ appointment, onBack }) {
               className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-2"
             />
             <Button variant="secondary" onClick={orderLabTest}>Laboratoriyaya göndər</Button>
-          </Card>
-        </>
+          </div>
+        </Card>
       )}
 
       {tab === 'prescription' && (
