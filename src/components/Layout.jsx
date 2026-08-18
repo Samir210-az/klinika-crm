@@ -1,7 +1,10 @@
+import { useEffect, useState, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { apiRequest } from '../lib/api'
 import { Avatar } from './ui'
-import { LogOut, Clock } from 'lucide-react'
+import Logo from './Logo'
+import { LogOut, Clock, MessageCircle } from 'lucide-react'
 
 const ROLE_LABELS = {
   reception: 'Resepşn',
@@ -17,6 +20,22 @@ export default function Layout({ children }) {
   const { employee, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [totalUnread, setTotalUnread] = useState(0)
+
+  const loadUnread = useCallback(async () => {
+    try {
+      const data = await apiRequest('/messages/unread')
+      setTotalUnread(Object.values(data.counts).reduce((s, n) => s + n, 0))
+    } catch {
+      // sakitcə keç
+    }
+  }, [])
+
+  useEffect(() => {
+    loadUnread()
+    const t = setInterval(loadUnread, 15000)
+    return () => clearInterval(t)
+  }, [loadUnread])
 
   function handleLogout() {
     logout()
@@ -28,6 +47,8 @@ export default function Layout({ children }) {
       <header className="bg-surface border-b border-black/[0.06] sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <Logo size={28} className="hidden sm:block" />
+            <div className="w-px h-8 bg-black/[0.06] hidden sm:block" />
             <Avatar name={employee?.full_name} />
             <div>
               <div className="text-[11px] uppercase tracking-wider text-primary font-semibold">
@@ -37,6 +58,20 @@ export default function Layout({ children }) {
             </div>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              to="/chat"
+              className={`relative flex items-center gap-1.5 text-sm transition-colors ${
+                location.pathname === '/chat' ? 'text-primary font-medium' : 'text-ink/50 hover:text-ink'
+              }`}
+            >
+              <MessageCircle size={15} />
+              <span className="hidden sm:inline">Söhbət</span>
+              {totalUnread > 0 && (
+                <span className="absolute -top-1.5 -right-2 sm:static sm:ml-0.5 min-w-[16px] h-4 px-1 rounded-full bg-accent text-white text-[10px] font-medium flex items-center justify-center">
+                  {totalUnread > 9 ? '9+' : totalUnread}
+                </span>
+              )}
+            </Link>
             <Link
               to="/attendance"
               className={`flex items-center gap-1.5 text-sm transition-colors ${

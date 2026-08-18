@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import Login from './pages/Login'
 import Kiosk from './pages/Kiosk'
 import MyAttendance from './pages/MyAttendance'
+import Chat from './pages/Chat'
 import ReceptionDashboard from './pages/ReceptionDashboard'
 import DoctorDashboard from './pages/DoctorDashboard'
 import NurseDashboard from './pages/NurseDashboard'
@@ -43,6 +44,16 @@ function AttendanceRoute() {
   )
 }
 
+function ChatRoute() {
+  const { isAuthed } = useAuth()
+  if (!isAuthed) return <Navigate to="/login" replace />
+  return (
+    <Layout>
+      <Chat />
+    </Layout>
+  )
+}
+
 function LoginRoute() {
   const { isAuthed } = useAuth()
   if (isAuthed) return <Navigate to="/" replace />
@@ -57,6 +68,7 @@ export default function App() {
           <Route path="/login" element={<LoginRoute />} />
           <Route path="/kiosk" element={<Kiosk />} />
           <Route path="/attendance" element={<AttendanceRoute />} />
+          <Route path="/chat" element={<ChatRoute />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </AuthProvider>

@@ -131,12 +131,25 @@ function VisitDetail({ appointment, onBack }) {
           <title>Resept — ${escapeHtml(appointment.patient.full_name)}</title>
           <style>
             body { font-family: 'Inter', sans-serif; padding: 40px; color: #16241f; }
+            .letterhead { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+            .letterhead .brand { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; color: #1f5f5b; font-weight: 600; }
             h1 { font-size: 18px; margin-bottom: 4px; }
             .meta { color: #666; font-size: 13px; margin-bottom: 24px; }
             .line { border-top: 1px solid #ddd; margin: 24px 0; }
           </style>
         </head>
         <body>
+          <div class="letterhead">
+            <svg width="30" height="30" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="50" cy="87" rx="15" ry="3.5" fill="#b8863b" opacity="0.9" />
+              <rect x="47" y="52" width="6" height="34" rx="2" fill="#b8863b" />
+              <path d="M28 33 C28 33 27 48 33 54 C38 59 45 60 50 60 C55 60 62 59 67 54 C73 48 72 33 72 33 Z" fill="#b8863b" />
+              <ellipse cx="50" cy="33" rx="22" ry="6.5" fill="#b8863b" />
+              <path d="M38 84 C30 80 30 72 38 68 C48 63 48 56 39 52 C29 48 30 40 40 37 C50 34 51 27 44 23" stroke="#1f5f5b" stroke-width="4.2" stroke-linecap="round" fill="none" />
+              <path d="M44 23 C41 20 41 15 45 13 C49 11 54 13 54 17 C54 20 51 22 47 22 Z" fill="#1f5f5b" />
+            </svg>
+            <span class="brand">Klinika CRM</span>
+          </div>
           <h1>Resept</h1>
           <div class="meta">
             Pasiyent: ${escapeHtml(appointment.patient.full_name)}<br/>
