@@ -57,35 +57,35 @@ export default function Layout({ children }) {
               <div className="text-[15px] font-semibold text-ink leading-tight">{employee?.full_name}</div>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 sm:gap-4">
+          <div className="flex items-center gap-1 sm:gap-3">
             <Link
               to="/chat"
-              className={`relative flex items-center gap-1.5 text-sm rounded-lg p-2 sm:p-0 transition-colors ${
-                location.pathname === '/chat' ? 'text-primary font-medium bg-primary-light sm:bg-transparent' : 'text-ink/70 hover:text-ink hover:bg-black/5 sm:hover:bg-transparent'
+              className={`relative flex items-center gap-1.5 text-sm rounded-xl p-2.5 transition-colors ${
+                location.pathname === '/chat' ? 'text-primary bg-primary-light' : 'text-ink hover:bg-black/[0.04]'
               }`}
             >
-              <MessageCircle size={19} strokeWidth={2} />
+              <MessageCircle size={22} strokeWidth={2} />
               <span className="hidden sm:inline">Söhbət</span>
               {totalUnread > 0 && (
-                <span className="absolute top-0.5 right-0.5 sm:static sm:ml-0.5 min-w-[16px] h-4 px-1 rounded-full bg-accent text-white text-[10px] font-medium flex items-center justify-center">
+                <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-accent text-white text-[10px] font-medium flex items-center justify-center">
                   {totalUnread > 9 ? '9+' : totalUnread}
                 </span>
               )}
             </Link>
             <Link
               to="/attendance"
-              className={`flex items-center gap-1.5 text-sm rounded-lg p-2 sm:p-0 transition-colors ${
-                location.pathname === '/attendance' ? 'text-primary font-medium bg-primary-light sm:bg-transparent' : 'text-ink/70 hover:text-ink hover:bg-black/5 sm:hover:bg-transparent'
+              className={`flex items-center gap-1.5 text-sm rounded-xl p-2.5 transition-colors ${
+                location.pathname === '/attendance' ? 'text-primary bg-primary-light' : 'text-ink hover:bg-black/[0.04]'
               }`}
             >
-              <Clock size={19} strokeWidth={2} />
+              <Clock size={22} strokeWidth={2} />
               <span className="hidden sm:inline">Davamiyyət</span>
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 text-sm text-ink/70 rounded-lg p-2 sm:p-0 hover:text-danger hover:bg-black/5 sm:hover:bg-transparent transition-colors"
+              className="flex items-center gap-1.5 text-sm text-ink rounded-xl p-2.5 hover:bg-danger/10 hover:text-danger transition-colors"
             >
-              <LogOut size={19} strokeWidth={2} />
+              <LogOut size={22} strokeWidth={2} />
               <span className="hidden sm:inline">Çıxış</span>
             </button>
           </div>

@@ -23,12 +23,15 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="flex gap-1 mb-6 border-b border-black/10 overflow-x-auto">
-        <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
-        <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
-        <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
-        <TabButton active={tab === 'lab'} onClick={() => setTab('lab')}>Laboratoriya</TabButton>
-        <TabButton active={tab === 'attendance'} onClick={() => setTab('attendance')}>Davamiyyət</TabButton>
+      <div className="relative -mx-5 px-5 mb-6">
+        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
+          <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
+          <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
+          <TabButton active={tab === 'lab'} onClick={() => setTab('lab')}>Laboratoriya</TabButton>
+          <TabButton active={tab === 'attendance'} onClick={() => setTab('attendance')}>Davamiyyət</TabButton>
+        </div>
+        <div className="pointer-events-none absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-bg to-transparent" />
       </div>
 
       {tab === 'stats' && <StatsView onSelectDoctor={setViewDoctorId} />}
@@ -44,8 +47,8 @@ function TabButton({ active, onClick, children }) {
   return (
     <button
       onClick={onClick}
-      className={`px-3 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
-        active ? 'border-primary text-primary' : 'border-transparent text-ink/60 hover:text-ink/70'
+      className={`shrink-0 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+        active ? 'bg-primary text-white' : 'bg-surface text-ink/70 border border-black/10'
       }`}
     >
       {children}

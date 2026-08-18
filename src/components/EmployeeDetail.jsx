@@ -16,16 +16,19 @@ const ROLE_LABELS = {
 export default function EmployeeDetail({ employeeId }) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     setLoading(true)
-    apiRequest(`/employees/${employeeId}`).then((d) => {
-      setData(d)
-      setLoading(false)
-    })
+    setError(null)
+    apiRequest(`/employees/${employeeId}`)
+      .then((d) => setData(d))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
   }, [employeeId])
 
   if (loading) return <p className="text-ink/60">Yüklənir…</p>
+  if (error) return <p className="text-danger text-sm">{error}</p>
   if (!data) return <EmptyState title="Əməkdaş tapılmadı" />
 
   const { employee, appointments, today_revenue, month_revenue } = data

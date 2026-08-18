@@ -6,16 +6,19 @@ import { FlaskConical, Pill } from 'lucide-react'
 export default function PatientHistory({ patientId, excludeAppointmentId }) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     setLoading(true)
-    apiRequest(`/patients/${patientId}`).then((d) => {
-      setData(d)
-      setLoading(false)
-    })
+    setError(null)
+    apiRequest(`/patients/${patientId}`)
+      .then((d) => setData(d))
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false))
   }, [patientId])
 
   if (loading) return <p className="text-ink/60">Yüklənir…</p>
+  if (error) return <p className="text-danger text-sm">{error}</p>
   if (!data) return <EmptyState title="Tarixçə tapılmadı" />
 
   const visits = data.visits.filter((v) => v.id !== excludeAppointmentId)
