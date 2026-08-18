@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/router?path=:path*" },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/kiosk", "destination": "/index.html" },
+    { "source": "/attendance", "destination": "/index.html" },
+    { "source": "/chat", "destination": "/index.html" }
+  ]
+}

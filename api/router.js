@@ -1,8 +1,8 @@
 // Bütün API marşrutları BURADAN keçir — Vercel-in serverless funksiya sayı
 // limitini (Hobby planda 12) aşmamaq üçün hər endpoint ayrıca fayl/funksiya
-// olmaq əvəzinə "catch-all" ilə tək funksiyaya yığılıb. Frontend tərəfində
-// heç bir dəyişikliyə ehtiyac yoxdur — URL-lər eyni qalır (/api/employees və s.),
-// Vercel onları avtomatik bura yönləndirir.
+// olmaq əvəzinə tək funksiyaya yığılıb. Sub-path vercel.json-dakı rewrite
+// qaydası ilə ?path= query parametri kimi ötürülür (fayl-adı əsaslı
+// [...catch-all] mexanizmi bu mühitdə etibarlı işləmədiyi üçün).
 
 import authLogin from './_handlers/auth-login.js'
 import employees from './_handlers/employees.js'
@@ -30,7 +30,9 @@ import messagesRead from './_handlers/messages-read.js'
 import messagesUnread from './_handlers/messages-unread.js'
 
 export default async function handler(req, res) {
-  const segments = Array.isArray(req.query.path) ? req.query.path : []
+  const rawPath = req.query.path
+  const pathStr = Array.isArray(rawPath) ? rawPath.join('/') : String(rawPath || '')
+  const segments = pathStr.split('/').filter(Boolean)
   const [a, b] = segments
 
   // Köhnə [id].js fayllarının gözlədiyi req.query.id-ni əl ilə təyin edirik
