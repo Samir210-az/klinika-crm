@@ -6,6 +6,24 @@ export function Card({ children, className = '', ...props }) {
   )
 }
 
+export function TealCard({ children, className = '', ...props }) {
+  return (
+    <div
+      className={`relative overflow-hidden bg-primary text-white rounded-2xl p-4 shadow-[0_8px_24px_-16px_rgba(31,95,91,0.5)] ${className}`}
+      {...props}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-50"
+        style={{
+          background:
+            'radial-gradient(120% 90% at 100% 0%, rgba(255,255,255,0.10), transparent 55%), radial-gradient(90% 70% at 0% 100%, rgba(0,0,0,0.15), transparent 60%)',
+        }}
+      />
+      <div className="relative">{children}</div>
+    </div>
+  )
+}
+
 export function StatCard({ label, value, sublabel, icon: Icon }) {
   return (
     <div className="relative overflow-hidden rounded-2xl bg-primary text-white p-5 shadow-[0_8px_24px_-12px_rgba(31,95,91,0.5)]">
@@ -64,12 +82,16 @@ export function Button({ children, variant = 'primary', className = '', ...props
   )
 }
 
-export function Avatar({ name }) {
+export function Avatar({ name, dark = false }) {
   const initials = name
     ? name.trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase()
     : '?'
   return (
-    <div className="w-9 h-9 shrink-0 rounded-full bg-primary-light text-primary font-display font-semibold text-sm flex items-center justify-center">
+    <div
+      className={`w-9 h-9 shrink-0 rounded-full font-display font-semibold text-sm flex items-center justify-center ${
+        dark ? 'bg-white/15 text-white' : 'bg-primary-light text-primary'
+      }`}
+    >
       {initials}
     </div>
   )

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState, Avatar } from './ui'
+import { Card, Button, EmptyState, Avatar, TealCard } from './ui'
 import EmployeeDetail from './EmployeeDetail'
 import { Trash2, Plus } from 'lucide-react'
 
@@ -110,11 +110,11 @@ export default function EmployeesPanel() {
       ) : (
         <div className="space-y-2">
           {employees.map((e) => (
-            <Card key={e.id} className={`flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors ${!e.is_active ? 'opacity-50' : ''}`} onClick={() => setSelectedId(e.id)}>
-              <Avatar name={e.full_name} />
+            <TealCard key={e.id} className={`flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity ${!e.is_active ? 'opacity-50' : ''}`} onClick={() => setSelectedId(e.id)}>
+              <Avatar name={e.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{e.full_name}</div>
-                <div className="text-sm text-ink/65 truncate">
+                <div className="font-medium truncate">{e.full_name}</div>
+                <div className="text-sm text-white/70 truncate">
                   {ROLE_LABELS[e.role]}
                   {e.role === 'doctor' && e.department && <> · {e.department}</>}
                   {' · '}{e.phone}
@@ -122,14 +122,23 @@ export default function EmployeesPanel() {
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <Button variant={e.is_active ? 'danger' : 'secondary'} onClick={(ev) => { ev.stopPropagation(); toggleActive(e) }}>
+                <button
+                  onClick={(ev) => { ev.stopPropagation(); toggleActive(e) }}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                    e.is_active ? 'bg-white/15 hover:bg-white/25' : 'bg-white text-primary hover:bg-white/90'
+                  }`}
+                >
                   {e.is_active ? 'Deaktiv et' : 'Aktivləşdir'}
-                </Button>
-                <Button variant="ghost" onClick={(ev) => { ev.stopPropagation(); handleDelete(e) }} disabled={deletingId === e.id} className="!px-2.5">
+                </button>
+                <button
+                  onClick={(ev) => { ev.stopPropagation(); handleDelete(e) }}
+                  disabled={deletingId === e.id}
+                  className="rounded-lg p-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 transition-colors"
+                >
                   <Trash2 size={15} />
-                </Button>
+                </button>
               </div>
-            </Card>
+            </TealCard>
           ))}
         </div>
       )}

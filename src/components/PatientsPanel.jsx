@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
-import { Card, Button, EmptyState, Avatar } from './ui'
+import { Card, Button, EmptyState, Avatar, TealCard } from './ui'
 import PatientHistory from './PatientHistory'
 import { Trash2, Search } from 'lucide-react'
 
@@ -75,23 +75,22 @@ export default function PatientsPanel() {
       ) : (
         <div className="space-y-2">
           {patients.map((p) => (
-            <Card key={p.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" onClick={() => setSelectedId(p.id)}>
-              <Avatar name={p.full_name} />
+            <TealCard key={p.id} className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setSelectedId(p.id)}>
+              <Avatar name={p.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{p.full_name}</div>
-                <div className="text-sm text-ink/65">{p.phone || 'Telefon yoxdur'}</div>
+                <div className="font-medium truncate">{p.full_name}</div>
+                <div className="text-sm text-white/70">{p.phone || 'Telefon yoxdur'}</div>
               </div>
               {canDelete && (
-                <Button
-                  variant="danger"
+                <button
                   onClick={(e) => { e.stopPropagation(); handleDelete(p) }}
                   disabled={deletingId === p.id}
-                  className="!px-3"
+                  className="rounded-lg p-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 transition-colors"
                 >
                   <Trash2 size={15} />
-                </Button>
+                </button>
               )}
-            </Card>
+            </TealCard>
           ))}
         </div>
       )}

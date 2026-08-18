@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState, Avatar } from './ui'
+import { Card, Button, EmptyState, Avatar, TealCard } from './ui'
 import { Settings2, Check, X } from 'lucide-react'
 
 const DAY_LABELS = ['Bazar', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə']
@@ -44,20 +44,20 @@ export default function AttendanceAdmin() {
           <h2 className="font-display text-lg font-semibold text-ink mb-3">Gözləyən məzuniyyət sorğuları</h2>
           <div className="space-y-2 mb-8">
             {pendingLeaves.map((l) => (
-              <Card key={l.id} className="flex items-center gap-3">
-                <Avatar name={l.employee?.full_name} />
+              <TealCard key={l.id} className="flex items-center gap-3">
+                <Avatar name={l.employee?.full_name} dark />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-ink truncate">{l.employee?.full_name}</div>
-                  <div className="text-xs text-ink/65">
+                  <div className="font-medium truncate">{l.employee?.full_name}</div>
+                  <div className="text-xs text-white/70">
                     {TYPE_LABELS[l.type]} · {new Date(l.start_date).toLocaleDateString('az-AZ')} — {new Date(l.end_date).toLocaleDateString('az-AZ')}
                     {l.reason && ` · ${l.reason}`}
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <Button variant="secondary" onClick={() => reviewLeave(l.id, 'approved')} className="!px-2.5"><Check size={15} /></Button>
-                  <Button variant="danger" onClick={() => reviewLeave(l.id, 'rejected')} className="!px-2.5"><X size={15} /></Button>
+                  <button onClick={() => reviewLeave(l.id, 'approved')} className="rounded-lg p-2 bg-white text-primary hover:bg-white/90 transition-colors"><Check size={15} /></button>
+                  <button onClick={() => reviewLeave(l.id, 'rejected')} className="rounded-lg p-2 bg-white/10 hover:bg-white/20 transition-colors"><X size={15} /></button>
                 </div>
-              </Card>
+              </TealCard>
             ))}
           </div>
         </>
@@ -80,25 +80,25 @@ export default function AttendanceAdmin() {
       ) : (
         <div className="space-y-2">
           {report.map((r) => (
-            <Card key={r.employee_id} className="flex items-center gap-3">
-              <Avatar name={r.full_name} />
+            <TealCard key={r.employee_id} className="flex items-center gap-3">
+              <Avatar name={r.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{r.full_name}</div>
+                <div className="font-medium truncate">{r.full_name}</div>
                 {r.has_schedule ? (
-                  <div className="text-xs text-ink/65 mt-0.5">
-                    <span className="text-success">{r.present_days} gəldi</span>
-                    {r.late_days > 0 && <span className="text-warning"> · {r.late_days} gecikdi</span>}
-                    {r.absent_days > 0 && <span className="text-danger"> · {r.absent_days} gəlmədi</span>}
-                    {r.on_leave_days > 0 && <span className="text-ink/60"> · {r.on_leave_days} icazəli</span>}
+                  <div className="text-xs text-white/80 mt-0.5">
+                    <span className="text-[#a8e0c8]">{r.present_days} gəldi</span>
+                    {r.late_days > 0 && <span className="text-[#f0d9a0]"> · {r.late_days} gecikdi</span>}
+                    {r.absent_days > 0 && <span className="text-[#f5b8ae]"> · {r.absent_days} gəlmədi</span>}
+                    {r.on_leave_days > 0 && <span className="text-white/60"> · {r.on_leave_days} icazəli</span>}
                   </div>
                 ) : (
-                  <div className="text-xs text-ink/50 mt-0.5">Qrafik təyin edilməyib</div>
+                  <div className="text-xs text-white/50 mt-0.5">Qrafik təyin edilməyib</div>
                 )}
               </div>
-              <Button variant="ghost" onClick={() => setScheduleFor(r)} className="!px-2.5 shrink-0">
+              <button onClick={() => setScheduleFor(r)} className="rounded-lg p-2 bg-white/10 hover:bg-white/20 transition-colors shrink-0">
                 <Settings2 size={15} />
-              </Button>
-            </Card>
+              </button>
+            </TealCard>
           ))}
         </div>
       )}

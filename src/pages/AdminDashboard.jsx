@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, StatCard } from '../components/ui'
+import { Card, StatCard, TealCard } from '../components/ui'
 import EmployeesPanel from '../components/EmployeesPanel'
 import PatientsPanel from '../components/PatientsPanel'
 import EmployeeDetail from '../components/EmployeeDetail'
@@ -74,28 +74,32 @@ function StatsView({ onSelectDoctor }) {
       </div>
 
       <h2 className="font-display text-lg font-semibold text-ink mb-3">Həkim üzrə dövriyyə (bu ay)</h2>
-      <Card>
-        {stats?.per_doctor?.length ? (
-          stats.per_doctor.map((d) => (
-            <button
+      {stats?.per_doctor?.length ? (
+        <div className="space-y-2">
+          {stats.per_doctor.map((d) => (
+            <TealCard
               key={d.doctor_id}
+              className="cursor-pointer hover:opacity-90 transition-opacity"
               onClick={() => onSelectDoctor(d.doctor_id)}
-              className="w-full flex items-center gap-3 py-3 border-b last:border-0 border-black/5 text-left hover:opacity-70 transition-opacity"
             >
-              <div className="w-8 h-8 shrink-0 rounded-full bg-primary-light text-primary flex items-center justify-center">
-                <Stethoscope size={15} />
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 shrink-0 rounded-full bg-white/15 flex items-center justify-center">
+                  <Stethoscope size={16} />
+                </div>
+                <span className="flex-1 font-medium">{d.full_name}</span>
+                <div className="text-right">
+                  <div className="text-sm font-semibold tabular-nums">{d.month.toFixed(2)} ₼</div>
+                  <div className="text-xs text-white/70 tabular-nums">bu gün: {d.today.toFixed(2)} ₼</div>
+                </div>
               </div>
-              <span className="text-sm text-ink flex-1">{d.full_name}</span>
-              <div className="text-right">
-                <div className="text-sm font-medium text-ink tabular-nums">{d.month.toFixed(2)} ₼</div>
-                <div className="text-xs text-ink/60 tabular-nums">bu gün: {d.today.toFixed(2)} ₼</div>
-              </div>
-            </button>
-          ))
-        ) : (
-          <p className="text-sm text-ink/60 py-4">Hələ ödəniş qeydə alınmayıb.</p>
-        )}
-      </Card>
+            </TealCard>
+          ))}
+        </div>
+      ) : (
+        <Card>
+          <p className="text-sm text-ink/60 py-2">Hələ ödəniş qeydə alınmayıb.</p>
+        </Card>
+      )}
     </div>
   )
 }
