@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { Card, Button, EmptyState, Avatar } from './ui'
+import EmployeeDetail from './EmployeeDetail'
 import { Trash2, Plus } from 'lucide-react'
 
 const ROLE_LABELS = {
@@ -42,6 +43,7 @@ export default function EmployeesPanel() {
   const [showForm, setShowForm] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
   const [error, setError] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -75,6 +77,15 @@ export default function EmployeesPanel() {
 
   return (
     <div>
+      {selectedId && (
+        <div className="animate-fade-in mb-6">
+          <button onClick={() => setSelectedId(null)} className="text-sm text-ink/50 hover:text-ink mb-4">← Siyahıya qayıt</button>
+          <EmployeeDetail employeeId={selectedId} />
+        </div>
+      )}
+
+      {!selectedId && (
+      <>
       <div className="flex items-center justify-between mb-5">
         <h1 className="font-display text-xl font-semibold text-ink">Əməkdaşlar</h1>
         <Button onClick={() => setShowForm(true)} className="flex items-center gap-1.5">
@@ -99,7 +110,7 @@ export default function EmployeesPanel() {
       ) : (
         <div className="space-y-2">
           {employees.map((e) => (
-            <Card key={e.id} className={`flex items-center gap-3 ${!e.is_active ? 'opacity-50' : ''}`}>
+            <Card key={e.id} className={`flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors ${!e.is_active ? 'opacity-50' : ''}`} onClick={() => setSelectedId(e.id)}>
               <Avatar name={e.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{e.full_name}</div>
@@ -111,16 +122,18 @@ export default function EmployeesPanel() {
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <Button variant={e.is_active ? 'danger' : 'secondary'} onClick={() => toggleActive(e)}>
+                <Button variant={e.is_active ? 'danger' : 'secondary'} onClick={(ev) => { ev.stopPropagation(); toggleActive(e) }}>
                   {e.is_active ? 'Deaktiv et' : 'Aktivləşdir'}
                 </Button>
-                <Button variant="ghost" onClick={() => handleDelete(e)} disabled={deletingId === e.id} className="!px-2.5">
+                <Button variant="ghost" onClick={(ev) => { ev.stopPropagation(); handleDelete(e) }} disabled={deletingId === e.id} className="!px-2.5">
                   <Trash2 size={15} />
                 </Button>
               </div>
             </Card>
           ))}
         </div>
+      )}
+      </>
       )}
     </div>
   )

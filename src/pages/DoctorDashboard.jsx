@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
 import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
-import { FlaskConical, Printer } from 'lucide-react'
+import PatientHistory from '../components/PatientHistory'
+import { FlaskConical, Printer, History } from 'lucide-react'
 
 export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState([])
@@ -192,6 +193,9 @@ function VisitDetail({ appointment, onBack }) {
           {completedLab.length > 0 && pendingLab.length === 0 && <span className="ml-1.5 text-success">●</span>}
         </TabButton>
         <TabButton active={tab === 'prescription'} onClick={() => setTab('prescription')}>Resept</TabButton>
+        <TabButton active={tab === 'history'} onClick={() => setTab('history')}>
+          <History size={14} className="inline mr-1 -mt-0.5" />Tarixçə
+        </TabButton>
       </div>
 
       {error && <p className="text-danger text-sm mb-3">{error}</p>}
@@ -265,6 +269,10 @@ function VisitDetail({ appointment, onBack }) {
             )}
           </div>
         </Card>
+      )}
+
+      {tab === 'history' && (
+        <PatientHistory patientId={appointment.patient.id} excludeAppointmentId={appointment.id} />
       )}
 
       <div className="fixed bottom-0 left-0 right-0 bg-surface border-t border-black/[0.06] p-4">

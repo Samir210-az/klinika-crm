@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
 import { Card, Button, EmptyState, Avatar } from './ui'
+import PatientHistory from './PatientHistory'
 import { Trash2, Search } from 'lucide-react'
 
 export default function PatientsPanel() {
@@ -12,6 +13,7 @@ export default function PatientsPanel() {
   const [loading, setLoading] = useState(true)
   const [deletingId, setDeletingId] = useState(null)
   const [error, setError] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
 
   const load = useCallback(async (q = '') => {
     setLoading(true)
@@ -43,6 +45,15 @@ export default function PatientsPanel() {
     }
   }
 
+  if (selectedId) {
+    return (
+      <div className="animate-fade-in">
+        <button onClick={() => setSelectedId(null)} className="text-sm text-ink/50 hover:text-ink mb-4">← Siyahıya qayıt</button>
+        <PatientHistory patientId={selectedId} />
+      </div>
+    )
+  }
+
   return (
     <div>
       <div className="relative mb-5">
@@ -64,7 +75,7 @@ export default function PatientsPanel() {
       ) : (
         <div className="space-y-2">
           {patients.map((p) => (
-            <Card key={p.id} className="flex items-center gap-3">
+            <Card key={p.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" onClick={() => setSelectedId(p.id)}>
               <Avatar name={p.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{p.full_name}</div>
@@ -73,7 +84,7 @@ export default function PatientsPanel() {
               {canDelete && (
                 <Button
                   variant="danger"
-                  onClick={() => handleDelete(p)}
+                  onClick={(e) => { e.stopPropagation(); handleDelete(p) }}
                   disabled={deletingId === p.id}
                   className="!px-3"
                 >
