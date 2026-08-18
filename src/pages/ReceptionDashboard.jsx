@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, StatusBadge, Button, EmptyState } from '../components/ui'
+import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
 
 export default function ReceptionDashboard() {
   const [appointments, setAppointments] = useState([])
@@ -28,7 +28,7 @@ export default function ReceptionDashboard() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-xl font-semibold text-ink">Bugünkü qəbullar</h1>
+        <h1 className="font-display text-xl font-semibold text-ink">Bugünkü qəbullar</h1>
         <Button onClick={() => setShowForm(true)}>+ Yeni qəbul</Button>
       </div>
 
@@ -43,9 +43,10 @@ export default function ReceptionDashboard() {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center justify-between">
-              <div>
-                <div className="font-medium text-ink">{a.patient?.full_name}</div>
+            <Card key={a.id} className="flex items-center gap-3">
+              <Avatar name={a.patient?.full_name} />
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
                 <div className="text-sm text-ink/50">Həkim: {a.doctor?.full_name}</div>
               </div>
               <StatusBadge status={a.status} />

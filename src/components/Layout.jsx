@@ -1,5 +1,7 @@
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { Avatar } from './ui'
+import { LogOut } from 'lucide-react'
 
 const ROLE_LABELS = {
   reception: 'Resepşn',
@@ -21,18 +23,22 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-screen bg-bg">
-      <header className="bg-surface border-b border-black/5 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-5 py-4 flex items-center justify-between">
-          <div>
-            <div className="text-xs uppercase tracking-wider text-primary font-medium">
-              {ROLE_LABELS[employee?.role] || employee?.role}
+      <header className="bg-surface border-b border-black/[0.06] sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar name={employee?.full_name} />
+            <div>
+              <div className="text-[11px] uppercase tracking-wider text-primary font-semibold">
+                {ROLE_LABELS[employee?.role] || employee?.role}
+              </div>
+              <div className="text-[15px] font-semibold text-ink leading-tight">{employee?.full_name}</div>
             </div>
-            <div className="text-lg font-semibold text-ink">{employee?.full_name}</div>
           </div>
           <button
             onClick={handleLogout}
-            className="text-sm text-ink/50 hover:text-danger transition-colors"
+            className="flex items-center gap-1.5 text-sm text-ink/50 hover:text-danger transition-colors"
           >
+            <LogOut size={15} />
             Çıxış
           </button>
         </div>

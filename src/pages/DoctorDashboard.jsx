@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
-import { Card, StatusBadge, Button, EmptyState } from '../components/ui'
+import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
 
 export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState([])
@@ -26,7 +26,7 @@ export default function DoctorDashboard() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-ink mb-5">Bugünkü növbə</h1>
+      <h1 className="font-display text-xl font-semibold text-ink mb-5">Bugünkü növbə</h1>
       {loading ? (
         <p className="text-ink/40">Yüklənir…</p>
       ) : appointments.length === 0 ? (
@@ -34,10 +34,13 @@ export default function DoctorDashboard() {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center justify-between cursor-pointer hover:border-primary/30" >
-              <div onClick={() => setSelected(a)} className="flex-1">
-                <div className="font-medium text-ink">{a.patient?.full_name}</div>
-                {a.complaint && <div className="text-sm text-ink/50">{a.complaint}</div>}
+            <Card key={a.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" >
+              <div onClick={() => setSelected(a)} className="flex items-center gap-3 flex-1 min-w-0">
+                <Avatar name={a.patient?.full_name} />
+                <div className="min-w-0">
+                  <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
+                  {a.complaint && <div className="text-sm text-ink/50 truncate">{a.complaint}</div>}
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <StatusBadge status={a.status} />
@@ -146,7 +149,7 @@ function VisitDetail({ appointment, onBack }) {
       <Card className="mb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-semibold text-ink">{appointment.patient.full_name}</h2>
+            <h2 className="font-display text-lg font-semibold text-ink">{appointment.patient.full_name}</h2>
             {appointment.complaint && <p className="text-sm text-ink/50 mt-0.5">Şikayət: {appointment.complaint}</p>}
           </div>
           <StatusBadge status={appointment.status} />

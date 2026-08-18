@@ -29,5 +29,24 @@ export default async function handler(req, res) {
     return res.status(200).json({ employee: data })
   }
 
+  if (req.method === 'DELETE') {
+    if (id === session.id) {
+      return res.status(400).json({ error: 'Öz hesabınızı silə bilməzsiniz.' })
+    }
+
+    const { error } = await supabase.from('employees').delete().eq('id', id)
+
+    if (error) {
+      // Foreign key violation - əməkdaşın qəbul/ödəniş/resept tarixçəsi var
+      if (error.code === '23503') {
+        return res.status(409).json({
+          error: 'Bu əməkdaşın qəbul/ödəniş tarixçəsi olduğu üçün silinə bilmir. Əvəzinə deaktiv edin.',
+        })
+      }
+      return res.status(500).json({ error: 'Server xətası.' })
+    }
+    return res.status(200).json({ success: true })
+  }
+
   return res.status(405).json({ error: 'Metod dəstəklənmir.' })
 }

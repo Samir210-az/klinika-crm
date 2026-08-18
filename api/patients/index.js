@@ -8,7 +8,8 @@ export default async function handler(req, res) {
     const session = requireRole(req, res, [])
     if (!session) return
     const q = (req.query.q || '').trim()
-    let query = supabase.from('patients').select('id, full_name, phone, birth_date').order('full_name').limit(20)
+    const limit = req.query.all === '1' ? 200 : 20
+    let query = supabase.from('patients').select('id, full_name, phone, birth_date, created_at').order('full_name').limit(limit)
     if (q) query = query.ilike('full_name', `%${q}%`)
     const { data, error } = await query
     if (error) return res.status(500).json({ error: 'Server xətası.' })

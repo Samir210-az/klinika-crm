@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState } from '../components/ui'
+import { Card, Button, EmptyState, StatCard, Avatar } from '../components/ui'
+import { Wallet, CalendarClock } from 'lucide-react'
 
 export default function AccountantDashboard() {
   const [stats, setStats] = useState(null)
@@ -32,22 +33,16 @@ export default function AccountantDashboard() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-ink mb-5">Kassa</h1>
+      <h1 className="font-display text-xl font-semibold text-ink mb-5">Kassa</h1>
 
       {stats && (
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <Card>
-            <div className="text-sm text-ink/50 mb-1">Bugünkü daxilolma</div>
-            <div className="text-2xl font-semibold text-ink">{stats.today_total.toFixed(2)} ₼</div>
-          </Card>
-          <Card>
-            <div className="text-sm text-ink/50 mb-1">Aylıq daxilolma</div>
-            <div className="text-2xl font-semibold text-ink">{stats.month_total.toFixed(2)} ₼</div>
-          </Card>
+          <StatCard label="Bugünkü daxilolma" value={`${stats.today_total.toFixed(2)} ₼`} icon={Wallet} />
+          <StatCard label="Aylıq daxilolma" value={`${stats.month_total.toFixed(2)} ₼`} icon={CalendarClock} />
         </div>
       )}
 
-      <h2 className="font-medium text-ink mb-3">Ödənişi gözləyən müayinələr</h2>
+      <h2 className="font-display text-lg font-semibold text-ink mb-3">Ödənişi gözləyən müayinələr</h2>
       {loading ? (
         <p className="text-ink/40">Yüklənir…</p>
       ) : unpaid.length === 0 ? (
@@ -55,9 +50,10 @@ export default function AccountantDashboard() {
       ) : (
         <div className="space-y-2 mb-8">
           {unpaid.map((a) => (
-            <Card key={a.id} className="flex items-center justify-between">
-              <div>
-                <div className="font-medium text-ink">{a.patient?.full_name}</div>
+            <Card key={a.id} className="flex items-center gap-3">
+              <Avatar name={a.patient?.full_name} />
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
                 <div className="text-sm text-ink/50">Həkim: {a.doctor?.full_name}</div>
               </div>
               <Button onClick={() => setActiveAppt(a)}>Ödəniş yaz</Button>
@@ -68,7 +64,7 @@ export default function AccountantDashboard() {
 
       {stats?.per_doctor?.length > 0 && (
         <>
-          <h2 className="font-medium text-ink mb-3">Həkim üzrə breakdown (bu ay)</h2>
+          <h2 className="font-display text-lg font-semibold text-ink mb-3">Həkim üzrə breakdown (bu ay)</h2>
           <Card>
             {stats.per_doctor.map((d) => (
               <div key={d.doctor_id} className="flex items-center justify-between py-2 border-b last:border-0 border-black/5">

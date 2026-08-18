@@ -4,7 +4,7 @@
   /* Klinika CRM dizayn tokenləri */
   --color-ink: #16241f;
   --color-primary: #1f5f5b;
-  --color-primary-dark: #123f3c;
+  --color-primary-dark: #103a37;
   --color-primary-light: #e7efee;
   --color-bg: #f2f4f3;
   --color-surface: #ffffff;
@@ -14,12 +14,19 @@
   --color-warning: #c98a2c;
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-feature-settings: "tnum" 1;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
 }
 
 @keyframes fade-in {

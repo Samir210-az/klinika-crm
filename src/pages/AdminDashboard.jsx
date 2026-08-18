@@ -1,19 +1,24 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card } from '../components/ui'
+import { Card, StatCard } from '../components/ui'
 import EmployeesPanel from '../components/EmployeesPanel'
+import PatientsPanel from '../components/PatientsPanel'
+import { Wallet, CalendarClock, Users, Stethoscope } from 'lucide-react'
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState('stats')
 
   return (
     <div>
-      <div className="flex gap-2 mb-6 border-b border-black/10">
+      <div className="flex gap-1 mb-6 border-b border-black/10">
         <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
         <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
+        <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
       </div>
 
-      {tab === 'stats' ? <StatsView /> : <EmployeesPanel />}
+      {tab === 'stats' && <StatsView />}
+      {tab === 'employees' && <EmployeesPanel />}
+      {tab === 'patients' && <PatientsPanel />}
     </div>
   )
 }
@@ -22,7 +27,7 @@ function TabButton({ active, onClick, children }) {
   return (
     <button
       onClick={onClick}
-      className={`px-1 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
+      className={`px-3 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
         active ? 'border-primary text-primary' : 'border-transparent text-ink/40 hover:text-ink/70'
       }`}
     >
@@ -43,29 +48,23 @@ function StatsView() {
   return (
     <div>
       <div className="grid grid-cols-2 gap-3 mb-6">
-        <Card>
-          <div className="text-sm text-ink/50 mb-1">Bugünkü dövriyyə</div>
-          <div className="text-2xl font-semibold text-ink">{stats ? stats.today_total.toFixed(2) : '—'} ₼</div>
-        </Card>
-        <Card>
-          <div className="text-sm text-ink/50 mb-1">Aylıq dövriyyə</div>
-          <div className="text-2xl font-semibold text-ink">{stats ? stats.month_total.toFixed(2) : '—'} ₼</div>
-        </Card>
-        <Card>
-          <div className="text-sm text-ink/50 mb-1">Aktiv əməkdaş</div>
-          <div className="text-2xl font-semibold text-ink">{employeeCount ?? '—'}</div>
-        </Card>
+        <StatCard label="Bugünkü dövriyyə" value={`${stats ? stats.today_total.toFixed(2) : '—'} ₼`} icon={Wallet} />
+        <StatCard label="Aylıq dövriyyə" value={`${stats ? stats.month_total.toFixed(2) : '—'} ₼`} icon={CalendarClock} />
+        <StatCard label="Aktiv əməkdaş" value={employeeCount ?? '—'} icon={Users} />
       </div>
 
-      <h2 className="font-medium text-ink mb-3">Həkim üzrə dövriyyə (bu ay)</h2>
+      <h2 className="font-display text-lg font-semibold text-ink mb-3">Həkim üzrə dövriyyə (bu ay)</h2>
       <Card>
         {stats?.per_doctor?.length ? (
           stats.per_doctor.map((d) => (
-            <div key={d.doctor_id} className="flex items-center justify-between py-2.5 border-b last:border-0 border-black/5">
-              <span className="text-sm text-ink">{d.full_name}</span>
+            <div key={d.doctor_id} className="flex items-center gap-3 py-3 border-b last:border-0 border-black/5">
+              <div className="w-8 h-8 shrink-0 rounded-full bg-primary-light text-primary flex items-center justify-center">
+                <Stethoscope size={15} />
+              </div>
+              <span className="text-sm text-ink flex-1">{d.full_name}</span>
               <div className="text-right">
-                <div className="text-sm font-medium text-ink">{d.month.toFixed(2)} ₼</div>
-                <div className="text-xs text-ink/40">bu gün: {d.today.toFixed(2)} ₼</div>
+                <div className="text-sm font-medium text-ink tabular-nums">{d.month.toFixed(2)} ₼</div>
+                <div className="text-xs text-ink/40 tabular-nums">bu gün: {d.today.toFixed(2)} ₼</div>
               </div>
             </div>
           ))

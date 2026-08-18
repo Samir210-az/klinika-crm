@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, StatusBadge, Button, EmptyState } from '../components/ui'
+import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
 
 export default function NurseDashboard() {
   const [doctorId, setDoctorId] = useState(null)
@@ -35,7 +35,7 @@ export default function NurseDashboard() {
     <div>
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-semibold text-ink">Növbə</h1>
+          <h1 className="font-display text-xl font-semibold text-ink">Növbə</h1>
           {doctorName && <p className="text-sm text-ink/50">Həkim: {doctorName}</p>}
         </div>
         <Button onClick={() => setShowForm(true)}>+ Pasiyent əlavə et</Button>
@@ -50,10 +50,11 @@ export default function NurseDashboard() {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center justify-between">
-              <div>
-                <div className="font-medium text-ink">{a.patient?.full_name}</div>
-                {a.complaint && <div className="text-sm text-ink/50">{a.complaint}</div>}
+            <Card key={a.id} className="flex items-center gap-3">
+              <Avatar name={a.patient?.full_name} />
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
+                {a.complaint && <div className="text-sm text-ink/50 truncate">{a.complaint}</div>}
               </div>
               <StatusBadge status={a.status} />
             </Card>
