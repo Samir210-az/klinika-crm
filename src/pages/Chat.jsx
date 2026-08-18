@@ -129,12 +129,12 @@ function ConversationView({ conversation, title, onRead }) {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-bg min-w-0">
+    <div className="flex-1 flex flex-col bg-bg min-w-0 min-h-0">
       <div className="px-4 py-3 border-b border-black/[0.06] bg-surface">
         <div className="font-medium text-ink">{title}</div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-3">
         {messages.length === 0 ? (
           <EmptyState title="Hələ mesaj yoxdur" hint="İlk mesajı sən göndər." />
         ) : (
