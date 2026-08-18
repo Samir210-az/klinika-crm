@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
 import { Card } from '../components/ui'
 import EmployeesPanel from '../components/EmployeesPanel'
-import { useAuth } from '../context/AuthContext'
 
 export default function AdminDashboard() {
-  const { employee } = useAuth()
   const [tab, setTab] = useState('stats')
 
   return (
@@ -15,7 +13,7 @@ export default function AdminDashboard() {
         <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
       </div>
 
-      {tab === 'stats' ? <StatsView showFullTotals={employee.role === 'director' || employee.role === 'accountant'} /> : <EmployeesPanel />}
+      {tab === 'stats' ? <StatsView /> : <EmployeesPanel />}
     </div>
   )
 }
