@@ -10,6 +10,7 @@ const ROLE_LABELS = {
   accountant: 'Mühasibatlıq',
   hr: 'Kadrlar şöbəsi',
   director: 'Direktor',
+  laborant: 'Laborant',
 }
 
 const DOCTOR_SPECIALTIES = [

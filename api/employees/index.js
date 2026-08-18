@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     if (!/^[A-Za-z0-9]{4,12}$/.test(pin)) {
       return res.status(400).json({ error: 'PIN 4-12 simvoldan ibarət olmalıdır (hərf/rəqəm).' })
     }
-    const validRoles = ['reception', 'doctor', 'nurse', 'accountant', 'hr', 'director']
+    const validRoles = ['reception', 'doctor', 'nurse', 'accountant', 'hr', 'director', 'laborant']
     if (!validRoles.includes(role)) {
       return res.status(400).json({ error: 'Yanlış rol.' })
     }

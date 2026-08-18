@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
 import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
+import { FlaskConical, Printer } from 'lucide-react'
 
 export default function DoctorDashboard() {
   const [appointments, setAppointments] = useState([])
@@ -34,18 +35,13 @@ export default function DoctorDashboard() {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" >
-              <div onClick={() => setSelected(a)} className="flex items-center gap-3 flex-1 min-w-0">
-                <Avatar name={a.patient?.full_name} />
-                <div className="min-w-0">
-                  <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                  {a.complaint && <div className="text-sm text-ink/50 truncate">{a.complaint}</div>}
-                </div>
+            <Card key={a.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" onClick={() => setSelected(a)}>
+              <Avatar name={a.patient?.full_name} />
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
+                {a.complaint && <div className="text-sm text-ink/50 truncate">{a.complaint}</div>}
               </div>
-              <div className="flex items-center gap-3">
-                <StatusBadge status={a.status} />
-                <Button variant="secondary" onClick={() => setSelected(a)}>Aç</Button>
-              </div>
+              <StatusBadge status={a.status} />
             </Card>
           ))}
         </div>
@@ -56,8 +52,11 @@ export default function DoctorDashboard() {
 
 function VisitDetail({ appointment, onBack }) {
   const { employee } = useAuth()
+  const [tab, setTab] = useState('diagnosis')
   const [diagnosis, setDiagnosis] = useState(appointment.diagnosis || '')
   const [notes, setNotes] = useState(appointment.notes || '')
+  const [labTests, setLabTests] = useState('')
+  const [labOrders, setLabOrders] = useState([])
   const [prescriptionText, setPrescriptionText] = useState('')
   const [savedPrescriptions, setSavedPrescriptions] = useState([])
   const [saving, setSaving] = useState(false)
@@ -68,21 +67,42 @@ function VisitDetail({ appointment, onBack }) {
     setSavedPrescriptions(data.prescriptions)
   }, [appointment.id])
 
+  const loadLabOrders = useCallback(async () => {
+    const data = await apiRequest(`/lab-orders?appointment_id=${appointment.id}`)
+    setLabOrders(data.lab_orders)
+  }, [appointment.id])
+
   useEffect(() => {
     loadPrescriptions()
-  }, [loadPrescriptions])
+    loadLabOrders()
+  }, [loadPrescriptions, loadLabOrders])
 
   async function startVisit() {
     await apiRequest(`/appointments/${appointment.id}`, { method: 'PATCH', body: { status: 'in_progress' } })
     appointment.status = 'in_progress'
   }
 
-  async function saveNotes() {
+  async function saveDiagnosis() {
     setSaving(true)
     try {
       await apiRequest(`/appointments/${appointment.id}`, { method: 'PATCH', body: { diagnosis, notes } })
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function orderLabTest() {
+    if (!labTests.trim()) return
+    setError(null)
+    try {
+      await apiRequest('/lab-orders', {
+        method: 'POST',
+        body: { appointment_id: appointment.id, patient_id: appointment.patient.id, tests: labTests },
+      })
+      setLabTests('')
+      loadLabOrders()
+    } catch (e) {
+      setError(e.message)
     }
   }
 
@@ -120,6 +140,7 @@ function VisitDetail({ appointment, onBack }) {
           <div class="meta">
             Pasiyent: ${escapeHtml(appointment.patient.full_name)}<br/>
             Həkim: ${escapeHtml(employee.full_name)}<br/>
+            Diaqnoz: ${escapeHtml(diagnosis || '—')}<br/>
             Tarix: ${new Date().toLocaleDateString('az-AZ')}
           </div>
           ${items}
@@ -142,54 +163,119 @@ function VisitDetail({ appointment, onBack }) {
     }
   }
 
+  const pendingLab = labOrders.filter((o) => o.status === 'pending')
+  const completedLab = labOrders.filter((o) => o.status === 'completed')
+
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in pb-20">
       <button onClick={onBack} className="text-sm text-ink/50 hover:text-ink mb-4">← Növbəyə qayıt</button>
 
       <Card className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="font-display text-lg font-semibold text-ink">{appointment.patient.full_name}</h2>
+        <div className="flex items-center gap-3">
+          <Avatar name={appointment.patient.full_name} />
+          <div className="flex-1 min-w-0">
+            <h2 className="font-display text-lg font-semibold text-ink truncate">{appointment.patient.full_name}</h2>
             {appointment.complaint && <p className="text-sm text-ink/50 mt-0.5">Şikayət: {appointment.complaint}</p>}
           </div>
           <StatusBadge status={appointment.status} />
         </div>
         {appointment.status === 'waiting' && (
-          <Button className="mt-4" onClick={startVisit}>Müayinəyə başla</Button>
+          <Button className="mt-4 w-full" onClick={startVisit}>Müayinəyə başla</Button>
         )}
       </Card>
 
-      <Card className="mb-4">
-        <label className="block text-sm font-medium text-ink/80 mb-1.5">Diaqnoz</label>
-        <textarea value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
-        <label className="block text-sm font-medium text-ink/80 mb-1.5">Qeydlər</label>
-        <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
-        <Button variant="secondary" onClick={saveNotes} disabled={saving}>Yadda saxla</Button>
-      </Card>
+      <div className="flex gap-1 mb-4 border-b border-black/10">
+        <TabButton active={tab === 'diagnosis'} onClick={() => setTab('diagnosis')}>Diaqnoz</TabButton>
+        <TabButton active={tab === 'prescription'} onClick={() => setTab('prescription')}>Resept</TabButton>
+      </div>
 
-      <Card className="mb-4">
-        <h3 className="font-medium text-ink mb-3">Resept</h3>
-        {savedPrescriptions.map((p) => (
-          <div key={p.id} className="text-sm bg-bg rounded-lg px-3 py-2 mb-2 whitespace-pre-wrap">{p.content}</div>
-        ))}
-        <textarea
-          value={prescriptionText}
-          onChange={(e) => setPrescriptionText(e.target.value)}
-          placeholder="Dərman adı, dozası, istifadə qaydası…"
-          rows={3}
-          className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-2"
-        />
-        {error && <p className="text-danger text-sm mb-2">{error}</p>}
-        <div className="flex gap-2">
-          <Button variant="secondary" onClick={addPrescription}>Reseptə əlavə et</Button>
-          {savedPrescriptions.length > 0 && <Button variant="ghost" onClick={printPrescription}>Çap et</Button>}
+      {error && <p className="text-danger text-sm mb-3">{error}</p>}
+
+      {tab === 'diagnosis' && (
+        <>
+          <Card className="mb-4">
+            <label className="block text-sm font-medium text-ink/80 mb-1.5">Diaqnoz</label>
+            <textarea value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
+            <label className="block text-sm font-medium text-ink/80 mb-1.5">Qeydlər</label>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />
+            <Button variant="secondary" onClick={saveDiagnosis} disabled={saving}>Yadda saxla</Button>
+          </Card>
+
+          <Card className="mb-4">
+            <div className="flex items-center gap-2 mb-3">
+              <FlaskConical size={16} className="text-primary" />
+              <h3 className="font-medium text-ink">Laboratoriya</h3>
+            </div>
+
+            {completedLab.map((o) => (
+              <div key={o.id} className="mb-3 rounded-lg bg-success/5 border border-success/15 px-3 py-2.5">
+                <div className="text-xs font-medium text-success mb-1">Nəticə hazırdır — {o.tests}</div>
+                <p className="text-sm text-ink whitespace-pre-wrap">{o.results}</p>
+              </div>
+            ))}
+            {pendingLab.map((o) => (
+              <div key={o.id} className="mb-3 rounded-lg bg-warning/5 border border-warning/15 px-3 py-2.5 text-sm text-warning">
+                Gözlənilir: {o.tests}
+              </div>
+            ))}
+
+            <textarea
+              value={labTests}
+              onChange={(e) => setLabTests(e.target.value)}
+              placeholder="Hansı analizlər lazımdır? (məs. Ümumi qan analizi, EKQ…)"
+              rows={2}
+              className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-2"
+            />
+            <Button variant="secondary" onClick={orderLabTest}>Laboratoriyaya göndər</Button>
+          </Card>
+        </>
+      )}
+
+      {tab === 'prescription' && (
+        <Card className="mb-4">
+          <h3 className="font-medium text-ink mb-3">Resept</h3>
+          {savedPrescriptions.map((p) => (
+            <div key={p.id} className="text-sm bg-bg rounded-lg px-3 py-2 mb-2 whitespace-pre-wrap">{p.content}</div>
+          ))}
+          <textarea
+            value={prescriptionText}
+            onChange={(e) => setPrescriptionText(e.target.value)}
+            placeholder="Dərman adı, dozası, istifadə qaydası…"
+            rows={3}
+            className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-2"
+          />
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={addPrescription}>Reseptə əlavə et</Button>
+            {savedPrescriptions.length > 0 && (
+              <Button variant="ghost" onClick={printPrescription} className="flex items-center gap-1.5">
+                <Printer size={14} /> Çap et
+              </Button>
+            )}
+          </div>
+        </Card>
+      )}
+
+      <div className="fixed bottom-0 left-0 right-0 bg-surface border-t border-black/[0.06] p-4">
+        <div className="max-w-5xl mx-auto">
+          <Button onClick={completeVisit} disabled={saving} className="w-full py-3">
+            {saving ? 'Yadda saxlanılır…' : 'Müayinə bitdi'}
+          </Button>
         </div>
-      </Card>
-
-      <Button onClick={completeVisit} disabled={saving} className="w-full py-3">
-        {saving ? 'Yadda saxlanılır…' : 'Müayinə bitdi'}
-      </Button>
+      </div>
     </div>
+  )
+}
+
+function TabButton({ active, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-3 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
+        active ? 'border-primary text-primary' : 'border-transparent text-ink/40 hover:text-ink/70'
+      }`}
+    >
+      {children}
+    </button>
   )
 }
 

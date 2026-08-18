@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     let query = supabase
       .from('payments')
-      .select('id, amount, payment_method, created_at, patient:patients(full_name), doctor:employees!payments_doctor_id_fkey(id, full_name)')
+      .select('id, amount, type, payment_method, created_at, patient:patients(full_name), doctor:employees!payments_doctor_id_fkey(id, full_name)')
       .order('created_at', { ascending: false })
 
     if (session.role === 'doctor') {
@@ -26,6 +26,7 @@ export default async function handler(req, res) {
 
     if (req.query.from) query = query.gte('created_at', req.query.from)
     if (req.query.to) query = query.lte('created_at', req.query.to)
+    if (req.query.type) query = query.eq('type', req.query.type)
 
     const { data, error } = await query
     if (error) return res.status(500).json({ error: 'Server xətası.' })
@@ -36,7 +37,7 @@ export default async function handler(req, res) {
     const session = requireRole(req, res, RECORD_ROLES)
     if (!session) return
 
-    const { appointment_id, patient_id, doctor_id, amount, payment_method } = req.body || {}
+    const { appointment_id, patient_id, doctor_id, amount, payment_method, type, lab_order_id } = req.body || {}
     if (!patient_id || !doctor_id || !amount) {
       return res.status(400).json({ error: 'Pasiyent, həkim və məbləğ tələb olunur.' })
     }
@@ -49,6 +50,8 @@ export default async function handler(req, res) {
         doctor_id,
         amount,
         payment_method: payment_method || 'cash',
+        type: type === 'lab' ? 'lab' : 'consultation',
+        lab_order_id: lab_order_id || null,
         recorded_by: session.id,
       })
       .select()

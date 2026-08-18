@@ -7,6 +7,7 @@ import DoctorDashboard from './pages/DoctorDashboard'
 import NurseDashboard from './pages/NurseDashboard'
 import AccountantDashboard from './pages/AccountantDashboard'
 import AdminDashboard from './pages/AdminDashboard'
+import LabDashboard from './pages/LabDashboard'
 
 const DASHBOARDS = {
   reception: ReceptionDashboard,
@@ -15,6 +16,7 @@ const DASHBOARDS = {
   accountant: AccountantDashboard,
   hr: AdminDashboard,
   director: AdminDashboard,
+  laborant: LabDashboard,
 }
 
 function Home() {
