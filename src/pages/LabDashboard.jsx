@@ -27,7 +27,7 @@ export default function LabDashboard() {
     <div>
       <h1 className="font-display text-xl font-semibold text-ink mb-5">Analiz gözləyən pasiyentlər</h1>
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : orders.length === 0 ? (
         <EmptyState title="Gözləyən analiz yoxdur" hint="Həkim analiz təyin etdikdə burada görünəcək." />
       ) : (
@@ -37,7 +37,7 @@ export default function LabDashboard() {
               <Avatar name={o.patient?.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{o.patient?.full_name}</div>
-                <div className="text-sm text-ink/50 truncate">{o.tests}</div>
+                <div className="text-sm text-ink/65 truncate">{o.tests}</div>
               </div>
               <FlaskConical size={18} className="text-primary/40 shrink-0" />
             </Card>
@@ -64,14 +64,14 @@ function LabOrderDetail({ order, onBack }) {
 
   return (
     <div className="animate-fade-in">
-      <button onClick={onBack} className="text-sm text-ink/50 hover:text-ink mb-4">← Siyahıya qayıt</button>
+      <button onClick={onBack} className="text-sm text-ink/65 hover:text-ink mb-4">← Siyahıya qayıt</button>
 
       <Card className="mb-4">
         <div className="flex items-center gap-3">
           <Avatar name={order.patient?.full_name} />
           <div>
             <h2 className="font-display text-lg font-semibold text-ink">{order.patient?.full_name}</h2>
-            <p className="text-sm text-ink/50">Həkim: {order.doctor?.full_name}</p>
+            <p className="text-sm text-ink/65">Həkim: {order.doctor?.full_name}</p>
           </div>
         </div>
       </Card>

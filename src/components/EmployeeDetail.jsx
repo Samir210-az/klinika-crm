@@ -25,7 +25,7 @@ export default function EmployeeDetail({ employeeId }) {
     })
   }, [employeeId])
 
-  if (loading) return <p className="text-ink/40">Yüklənir…</p>
+  if (loading) return <p className="text-ink/60">Yüklənir…</p>
   if (!data) return <EmptyState title="Əməkdaş tapılmadı" />
 
   const { employee, appointments, today_revenue, month_revenue } = data
@@ -40,7 +40,7 @@ export default function EmployeeDetail({ employeeId }) {
         <Avatar name={employee.full_name} />
         <div>
           <div className="font-display text-lg font-semibold text-ink">{employee.full_name}</div>
-          <div className="text-sm text-ink/50">
+          <div className="text-sm text-ink/65">
             {ROLE_LABELS[employee.role]}
             {employee.department && ` · ${employee.department}`}
             {' · '}{employee.phone}
@@ -67,7 +67,7 @@ export default function EmployeeDetail({ employeeId }) {
               <Avatar name={a.patient?.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                <div className="text-xs text-ink/40">{new Date(a.scheduled_at).toLocaleDateString('az-AZ')}</div>
+                <div className="text-xs text-ink/60">{new Date(a.scheduled_at).toLocaleDateString('az-AZ')}</div>
                 {a.diagnosis && <div className="text-sm text-ink/60 mt-0.5 truncate">{a.diagnosis}</div>}
               </div>
               <StatusBadge status={a.status} />

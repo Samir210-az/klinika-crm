@@ -56,7 +56,7 @@ export default function Kiosk() {
           <Logo size={48} className="mx-auto mb-3" />
           <div className="text-xs tracking-[0.2em] uppercase text-primary font-semibold mb-2">Klinika CRM</div>
           <h1 className="font-display text-2xl font-semibold text-ink">Davamiyyət</h1>
-          <p className="text-sm text-ink/50 mt-1">Adını seç və PIN-lə təsdiqlə</p>
+          <p className="text-sm text-ink/65 mt-1">Adını seç və PIN-lə təsdiqlə</p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -69,7 +69,7 @@ export default function Kiosk() {
               <Avatar name={e.full_name} />
               <div className="text-center">
                 <div className="text-sm font-medium text-ink">{e.full_name}</div>
-                <div className="text-xs text-ink/40">{ROLE_LABELS[e.role]}</div>
+                <div className="text-xs text-ink/60">{ROLE_LABELS[e.role]}</div>
               </div>
             </button>
           ))}
@@ -124,7 +124,7 @@ function PinEntry({ employee, onCancel, onDone }) {
           >
             <LogIn size={16} /> {saving ? 'Yoxlanılır…' : 'Təsdiqlə'}
           </button>
-          <button type="button" onClick={onCancel} className="w-full text-sm text-ink/50 mt-3">
+          <button type="button" onClick={onCancel} className="w-full text-sm text-ink/65 mt-3">
             Ləğv et
           </button>
         </form>

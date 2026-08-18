@@ -62,7 +62,7 @@ export default function MyAttendance() {
             <Clock size={18} />
           </div>
           <div>
-            <div className="text-sm text-ink/50">Bugün</div>
+            <div className="text-sm text-ink/65">Bugün</div>
             <div className="text-sm text-ink">
               Giriş: <span className="font-medium">{formatTime(today?.check_in_at)}</span>
               {'  ·  '}
@@ -101,7 +101,7 @@ export default function MyAttendance() {
                 <div className="text-sm font-medium text-ink">
                   {new Date(l.start_date).toLocaleDateString('az-AZ')} — {new Date(l.end_date).toLocaleDateString('az-AZ')}
                 </div>
-                <div className="text-xs text-ink/40">{TYPE_LABELS[l.type]}{l.reason && ` · ${l.reason}`}</div>
+                <div className="text-xs text-ink/60">{TYPE_LABELS[l.type]}{l.reason && ` · ${l.reason}`}</div>
               </div>
               <span className={`text-xs font-medium ${STATUS_STYLES[l.status]}`}>{STATUS_LABELS[l.status]}</span>
             </Card>
@@ -111,7 +111,7 @@ export default function MyAttendance() {
 
       <h2 className="font-display text-lg font-semibold text-ink mb-3">Son qeydlər</h2>
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : history.length === 0 ? (
         <EmptyState title="Hələ davamiyyət qeydi yoxdur" />
       ) : (
@@ -157,11 +157,11 @@ function LeaveRequestForm({ onClose, onCreated }) {
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-2 gap-3 mb-3">
           <div>
-            <label className="block text-xs text-ink/50 mb-1">Başlanğıc</label>
+            <label className="block text-xs text-ink/65 mb-1">Başlanğıc</label>
             <input required type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
           </div>
           <div>
-            <label className="block text-xs text-ink/50 mb-1">Bitmə</label>
+            <label className="block text-xs text-ink/65 mb-1">Bitmə</label>
             <input required type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
           </div>
         </div>

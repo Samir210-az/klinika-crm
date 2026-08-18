@@ -38,7 +38,7 @@ export default function Chat() {
   }, [loadUnread])
 
   return (
-    <div className="flex h-[calc(100vh-64px-73px)] -mx-5 md:mx-0 md:rounded-2xl md:border md:border-black/[0.06] overflow-hidden">
+    <div className="flex h-[calc(100vh-64px-73px)] md:rounded-2xl md:border md:border-black/[0.06] overflow-hidden">
       <aside className="w-28 md:w-56 shrink-0 border-r border-black/[0.06] bg-surface overflow-y-auto">
         <button
           onClick={() => setActiveConversation('general')}
@@ -66,7 +66,7 @@ export default function Chat() {
             <Avatar name={c.full_name} />
             <div className="min-w-0 flex-1 hidden md:block">
               <div className="text-sm font-medium text-ink truncate">{c.full_name}</div>
-              <div className="text-xs text-ink/40 truncate">{ROLE_LABELS[c.role]}</div>
+              <div className="text-xs text-ink/60 truncate">{ROLE_LABELS[c.role]}</div>
             </div>
             {unreadCounts[c.id] > 0 && <UnreadDot count={unreadCounts[c.id]} />}
           </button>
@@ -147,7 +147,7 @@ function ConversationView({ conversation, title, onRead }) {
                     <div className="text-xs font-medium text-primary mb-0.5">{m.sender?.full_name}</div>
                   )}
                   <div className="text-sm whitespace-pre-wrap">{m.content}</div>
-                  <div className={`text-[10px] mt-1 ${isMine ? 'text-white/60' : 'text-ink/30'}`}>
+                  <div className={`text-[10px] mt-1 ${isMine ? 'text-white/60' : 'text-ink/50'}`}>
                     {new Date(m.created_at).toLocaleTimeString('az-AZ', { hour: '2-digit', minute: '2-digit' })}
                   </div>
                 </div>

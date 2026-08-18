@@ -15,7 +15,7 @@ export default function PatientHistory({ patientId, excludeAppointmentId }) {
     })
   }, [patientId])
 
-  if (loading) return <p className="text-ink/40">Yüklənir…</p>
+  if (loading) return <p className="text-ink/60">Yüklənir…</p>
   if (!data) return <EmptyState title="Tarixçə tapılmadı" />
 
   const visits = data.visits.filter((v) => v.id !== excludeAppointmentId)
@@ -26,7 +26,7 @@ export default function PatientHistory({ patientId, excludeAppointmentId }) {
         <Avatar name={data.patient.full_name} />
         <div>
           <div className="font-display text-lg font-semibold text-ink">{data.patient.full_name}</div>
-          <div className="text-sm text-ink/50">
+          <div className="text-sm text-ink/65">
             {data.patient.phone || 'Telefon yoxdur'}
             {data.patient.birth_date && <> · d.t. {new Date(data.patient.birth_date).toLocaleDateString('az-AZ')}</>}
           </div>
@@ -42,7 +42,7 @@ export default function PatientHistory({ patientId, excludeAppointmentId }) {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <div className="text-sm font-medium text-ink">{v.doctor?.full_name}</div>
-                  <div className="text-xs text-ink/40">
+                  <div className="text-xs text-ink/60">
                     {v.doctor?.department && `${v.doctor.department} · `}
                     {new Date(v.scheduled_at).toLocaleDateString('az-AZ')}
                   </div>
@@ -51,13 +51,13 @@ export default function PatientHistory({ patientId, excludeAppointmentId }) {
               </div>
 
               {v.complaint && (
-                <div className="text-sm text-ink/70 mb-1"><span className="text-ink/40">Şikayət:</span> {v.complaint}</div>
+                <div className="text-sm text-ink/70 mb-1"><span className="text-ink/60">Şikayət:</span> {v.complaint}</div>
               )}
               {v.diagnosis && (
-                <div className="text-sm text-ink mb-1"><span className="text-ink/40">Diaqnoz:</span> {v.diagnosis}</div>
+                <div className="text-sm text-ink mb-1"><span className="text-ink/60">Diaqnoz:</span> {v.diagnosis}</div>
               )}
               {v.notes && (
-                <div className="text-sm text-ink/70 mb-1"><span className="text-ink/40">Qeyd:</span> {v.notes}</div>
+                <div className="text-sm text-ink/70 mb-1"><span className="text-ink/60">Qeyd:</span> {v.notes}</div>
               )}
 
               {v.lab_orders.length > 0 && (

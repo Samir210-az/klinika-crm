@@ -36,7 +36,7 @@ export default function NurseDashboard() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="font-display text-xl font-semibold text-ink">Növbə</h1>
-          {doctorName && <p className="text-sm text-ink/50">Həkim: {doctorName}</p>}
+          {doctorName && <p className="text-sm text-ink/65">Həkim: {doctorName}</p>}
         </div>
         <Button onClick={() => setShowForm(true)}>+ Pasiyent əlavə et</Button>
       </div>
@@ -44,7 +44,7 @@ export default function NurseDashboard() {
       {showForm && <AddPatientForm doctorId={doctorId} onClose={() => setShowForm(false)} onCreated={load} />}
 
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : appointments.length === 0 ? (
         <EmptyState title="Bu gün üçün pasiyent yoxdur" />
       ) : (
@@ -54,7 +54,7 @@ export default function NurseDashboard() {
               <Avatar name={a.patient?.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                {a.complaint && <div className="text-sm text-ink/50 truncate">{a.complaint}</div>}
+                {a.complaint && <div className="text-sm text-ink/65 truncate">{a.complaint}</div>}
               </div>
               <StatusBadge status={a.status} />
             </Card>

@@ -52,7 +52,7 @@ export default function AccountantDashboard() {
 
       <h2 className="font-display text-lg font-semibold text-ink mb-3">Ödənişi gözləyən müayinələr</h2>
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : unpaid.length === 0 ? (
         <EmptyState title="Ödənişi gözləyən müayinə yoxdur" />
       ) : (
@@ -62,7 +62,7 @@ export default function AccountantDashboard() {
               <Avatar name={a.patient?.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                <div className="text-sm text-ink/50">Həkim: {a.doctor?.full_name}</div>
+                <div className="text-sm text-ink/65">Həkim: {a.doctor?.full_name}</div>
               </div>
               <Button onClick={() => setActiveAppt(a)}>Ödəniş yaz</Button>
             </Card>
@@ -82,7 +82,7 @@ export default function AccountantDashboard() {
                 <Avatar name={o.patient?.full_name} />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-ink truncate">{o.patient?.full_name}</div>
-                  <div className="text-sm text-ink/50 truncate">{o.tests}</div>
+                  <div className="text-sm text-ink/65 truncate">{o.tests}</div>
                 </div>
                 <Button onClick={() => setActiveLabOrder(o)}>Ödəniş yaz</Button>
               </Card>
@@ -167,7 +167,7 @@ function PaymentForm({ title, subtitle, onClose, onSaved, body }) {
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center p-5 z-20">
       <Card className="w-full max-w-sm animate-fade-in">
         <h3 className="font-semibold text-ink mb-1">{title}</h3>
-        <p className="text-sm text-ink/50 mb-4">{subtitle}</p>
+        <p className="text-sm text-ink/65 mb-4">{subtitle}</p>
         <form onSubmit={handleSubmit}>
           <label className="block text-sm font-medium text-ink/80 mb-1.5">Məbləğ (₼)</label>
           <input required type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm mb-3" />

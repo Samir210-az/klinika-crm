@@ -65,7 +65,7 @@ export default function Login() {
       <div className="flex-1 flex items-center justify-center p-8">
         <form onSubmit={handleSubmit} className="w-full max-w-sm animate-fade-in">
           <h2 className="font-display text-2xl font-semibold text-ink mb-1">Daxil ol</h2>
-          <p className="text-sm text-ink/50 mb-8">Telefon nömrən və PIN kodunla giriş et.</p>
+          <p className="text-sm text-ink/65 mb-8">Telefon nömrən və PIN kodunla giriş et.</p>
 
           <label className="block text-sm font-medium text-ink/80 mb-1.5">Telefon</label>
           <input
@@ -102,7 +102,7 @@ export default function Login() {
             {loading ? 'Yoxlanılır…' : (<>Daxil ol <ArrowRight size={16} /></>)}
           </button>
 
-          <p className="text-xs text-ink/40 mt-6">
+          <p className="text-xs text-ink/60 mt-6">
             Hesabın yoxdur? Kadrlar şöbəsi ilə əlaqə saxla.
           </p>
 
@@ -110,7 +110,7 @@ export default function Login() {
             href="https://instagram.com/securtiy_group"
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-center text-xs text-ink/30 hover:text-ink/50 transition-colors mt-10"
+            className="block text-center text-xs text-ink/50 hover:text-ink/65 transition-colors mt-10"
           >
             By securtiy_group
           </a>

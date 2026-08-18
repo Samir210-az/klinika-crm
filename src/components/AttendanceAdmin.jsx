@@ -48,7 +48,7 @@ export default function AttendanceAdmin() {
                 <Avatar name={l.employee?.full_name} />
                 <div className="flex-1 min-w-0">
                   <div className="font-medium text-ink truncate">{l.employee?.full_name}</div>
-                  <div className="text-xs text-ink/50">
+                  <div className="text-xs text-ink/65">
                     {TYPE_LABELS[l.type]} · {new Date(l.start_date).toLocaleDateString('az-AZ')} — {new Date(l.end_date).toLocaleDateString('az-AZ')}
                     {l.reason && ` · ${l.reason}`}
                   </div>
@@ -74,7 +74,7 @@ export default function AttendanceAdmin() {
       </div>
 
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : report.length === 0 ? (
         <EmptyState title="Əməkdaş tapılmadı" />
       ) : (
@@ -85,14 +85,14 @@ export default function AttendanceAdmin() {
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{r.full_name}</div>
                 {r.has_schedule ? (
-                  <div className="text-xs text-ink/50 mt-0.5">
+                  <div className="text-xs text-ink/65 mt-0.5">
                     <span className="text-success">{r.present_days} gəldi</span>
                     {r.late_days > 0 && <span className="text-warning"> · {r.late_days} gecikdi</span>}
                     {r.absent_days > 0 && <span className="text-danger"> · {r.absent_days} gəlmədi</span>}
-                    {r.on_leave_days > 0 && <span className="text-ink/40"> · {r.on_leave_days} icazəli</span>}
+                    {r.on_leave_days > 0 && <span className="text-ink/60"> · {r.on_leave_days} icazəli</span>}
                   </div>
                 ) : (
-                  <div className="text-xs text-ink/30 mt-0.5">Qrafik təyin edilməyib</div>
+                  <div className="text-xs text-ink/50 mt-0.5">Qrafik təyin edilməyib</div>
                 )}
               </div>
               <Button variant="ghost" onClick={() => setScheduleFor(r)} className="!px-2.5 shrink-0">
@@ -146,7 +146,7 @@ function ScheduleEditor({ employee, onClose }) {
 
   return (
     <div className="animate-fade-in">
-      <button onClick={onClose} className="text-sm text-ink/50 hover:text-ink mb-4">← Geri qayıt</button>
+      <button onClick={onClose} className="text-sm text-ink/65 hover:text-ink mb-4">← Geri qayıt</button>
 
       <Card className="mb-4 flex items-center gap-3">
         <Avatar name={employee.full_name} />
@@ -154,10 +154,10 @@ function ScheduleEditor({ employee, onClose }) {
       </Card>
 
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : (
         <Card className="mb-4">
-          <p className="text-sm text-ink/50 mb-4">İş günlərini seç və saatları təyin et.</p>
+          <p className="text-sm text-ink/65 mb-4">İş günlərini seç və saatları təyin et.</p>
           {DAY_LABELS.map((label, dow) => (
             <div key={dow} className="flex items-center gap-3 py-2.5 border-b last:border-0 border-black/5">
               <button
@@ -172,7 +172,7 @@ function ScheduleEditor({ employee, onClose }) {
               {days[dow] && (
                 <div className="flex items-center gap-1.5">
                   <input type="time" value={days[dow].start_time} onChange={(e) => updateTime(dow, 'start_time', e.target.value)} className="rounded-lg border border-black/10 px-2 py-1 text-sm" />
-                  <span className="text-ink/30">–</span>
+                  <span className="text-ink/50">–</span>
                   <input type="time" value={days[dow].end_time} onChange={(e) => updateTime(dow, 'end_time', e.target.value)} className="rounded-lg border border-black/10 px-2 py-1 text-sm" />
                 </div>
               )}

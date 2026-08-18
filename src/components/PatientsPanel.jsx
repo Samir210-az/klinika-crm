@@ -48,7 +48,7 @@ export default function PatientsPanel() {
   if (selectedId) {
     return (
       <div className="animate-fade-in">
-        <button onClick={() => setSelectedId(null)} className="text-sm text-ink/50 hover:text-ink mb-4">← Siyahıya qayıt</button>
+        <button onClick={() => setSelectedId(null)} className="text-sm text-ink/65 hover:text-ink mb-4">← Siyahıya qayıt</button>
         <PatientHistory patientId={selectedId} />
       </div>
     )
@@ -57,7 +57,7 @@ export default function PatientsPanel() {
   return (
     <div>
       <div className="relative mb-5">
-        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/30" />
+        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/50" />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -69,7 +69,7 @@ export default function PatientsPanel() {
       {error && <p className="text-danger text-sm mb-3">{error}</p>}
 
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : patients.length === 0 ? (
         <EmptyState title="Pasiyent tapılmadı" />
       ) : (
@@ -79,7 +79,7 @@ export default function PatientsPanel() {
               <Avatar name={p.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{p.full_name}</div>
-                <div className="text-sm text-ink/50">{p.phone || 'Telefon yoxdur'}</div>
+                <div className="text-sm text-ink/65">{p.phone || 'Telefon yoxdur'}</div>
               </div>
               {canDelete && (
                 <Button

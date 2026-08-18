@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
@@ -26,7 +27,7 @@ function Home() {
   const { employee, isAuthed } = useAuth()
   if (!isAuthed) return <Navigate to="/login" replace />
   const Dashboard = DASHBOARDS[employee.role]
-  if (!Dashboard) return <p className="p-8 text-ink/50">Bu rol üçün panel tənzimlənməyib.</p>
+  if (!Dashboard) return <p className="p-8 text-ink/65">Bu rol üçün panel tənzimlənməyib.</p>
   return (
     <Layout>
       <Dashboard />
@@ -60,10 +61,19 @@ function LoginRoute() {
   return <Login />
 }
 
+function ScrollReset() {
+  const location = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location.pathname])
+  return null
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <ScrollReset />
         <Routes>
           <Route path="/login" element={<LoginRoute />} />
           <Route path="/kiosk" element={<Kiosk />} />

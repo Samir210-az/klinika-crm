@@ -5,6 +5,7 @@ import EmployeesPanel from '../components/EmployeesPanel'
 import PatientsPanel from '../components/PatientsPanel'
 import EmployeeDetail from '../components/EmployeeDetail'
 import AttendanceAdmin from '../components/AttendanceAdmin'
+import LabOverview from '../components/LabOverview'
 import { Wallet, CalendarClock, Users, Stethoscope } from 'lucide-react'
 
 export default function AdminDashboard() {
@@ -14,7 +15,7 @@ export default function AdminDashboard() {
   if (viewDoctorId) {
     return (
       <div className="animate-fade-in">
-        <button onClick={() => setViewDoctorId(null)} className="text-sm text-ink/50 hover:text-ink mb-4">← Geri qayıt</button>
+        <button onClick={() => setViewDoctorId(null)} className="text-sm text-ink/65 hover:text-ink mb-4">← Geri qayıt</button>
         <EmployeeDetail employeeId={viewDoctorId} />
       </div>
     )
@@ -22,16 +23,18 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="flex gap-1 mb-6 border-b border-black/10">
+      <div className="flex gap-1 mb-6 border-b border-black/10 overflow-x-auto">
         <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
         <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
         <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
+        <TabButton active={tab === 'lab'} onClick={() => setTab('lab')}>Laboratoriya</TabButton>
         <TabButton active={tab === 'attendance'} onClick={() => setTab('attendance')}>Davamiyyət</TabButton>
       </div>
 
       {tab === 'stats' && <StatsView onSelectDoctor={setViewDoctorId} />}
       {tab === 'employees' && <EmployeesPanel />}
       {tab === 'patients' && <PatientsPanel />}
+      {tab === 'lab' && <LabOverview />}
       {tab === 'attendance' && <AttendanceAdmin />}
     </div>
   )
@@ -42,7 +45,7 @@ function TabButton({ active, onClick, children }) {
     <button
       onClick={onClick}
       className={`px-3 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
-        active ? 'border-primary text-primary' : 'border-transparent text-ink/40 hover:text-ink/70'
+        active ? 'border-primary text-primary' : 'border-transparent text-ink/60 hover:text-ink/70'
       }`}
     >
       {children}
@@ -82,12 +85,12 @@ function StatsView({ onSelectDoctor }) {
               <span className="text-sm text-ink flex-1">{d.full_name}</span>
               <div className="text-right">
                 <div className="text-sm font-medium text-ink tabular-nums">{d.month.toFixed(2)} ₼</div>
-                <div className="text-xs text-ink/40 tabular-nums">bu gün: {d.today.toFixed(2)} ₼</div>
+                <div className="text-xs text-ink/60 tabular-nums">bu gün: {d.today.toFixed(2)} ₼</div>
               </div>
             </button>
           ))
         ) : (
-          <p className="text-sm text-ink/40 py-4">Hələ ödəniş qeydə alınmayıb.</p>
+          <p className="text-sm text-ink/60 py-4">Hələ ödəniş qeydə alınmayıb.</p>
         )}
       </Card>
     </div>

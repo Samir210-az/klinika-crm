@@ -10,9 +10,9 @@ export function StatCard({ label, value, sublabel, icon: Icon }) {
   return (
     <Card className="relative overflow-hidden">
       {Icon && <Icon size={18} className="absolute top-5 right-5 text-primary/30" strokeWidth={1.75} />}
-      <div className="text-xs font-medium uppercase tracking-wide text-ink/40 mb-2">{label}</div>
+      <div className="text-xs font-medium uppercase tracking-wide text-ink/60 mb-2">{label}</div>
       <div className="font-display text-3xl font-semibold text-ink tabular-nums">{value}</div>
-      {sublabel && <div className="text-xs text-ink/40 mt-1">{sublabel}</div>}
+      {sublabel && <div className="text-xs text-ink/60 mt-1">{sublabel}</div>}
     </Card>
   )
 }
@@ -70,7 +70,7 @@ export function Avatar({ name }) {
 
 export function EmptyState({ title, hint }) {
   return (
-    <div className="text-center py-14 text-ink/40">
+    <div className="text-center py-14 text-ink/60">
       <p className="font-medium text-ink/60">{title}</p>
       {hint && <p className="text-sm mt-1">{hint}</p>}
     </div>

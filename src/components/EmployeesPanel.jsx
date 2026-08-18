@@ -79,7 +79,7 @@ export default function EmployeesPanel() {
     <div>
       {selectedId && (
         <div className="animate-fade-in mb-6">
-          <button onClick={() => setSelectedId(null)} className="text-sm text-ink/50 hover:text-ink mb-4">← Siyahıya qayıt</button>
+          <button onClick={() => setSelectedId(null)} className="text-sm text-ink/65 hover:text-ink mb-4">← Siyahıya qayıt</button>
           <EmployeeDetail employeeId={selectedId} />
         </div>
       )}
@@ -104,7 +104,7 @@ export default function EmployeesPanel() {
       {error && <p className="text-danger text-sm mb-3">{error}</p>}
 
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : employees.length === 0 ? (
         <EmptyState title="Hələ əməkdaş yoxdur" />
       ) : (
@@ -114,7 +114,7 @@ export default function EmployeesPanel() {
               <Avatar name={e.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{e.full_name}</div>
-                <div className="text-sm text-ink/50 truncate">
+                <div className="text-sm text-ink/65 truncate">
                   {ROLE_LABELS[e.role]}
                   {e.role === 'doctor' && e.department && <> · {e.department}</>}
                   {' · '}{e.phone}
@@ -216,7 +216,7 @@ function NewEmployeeForm({ doctors, onClose, onCreated }) {
           <div className="mb-3">
             <label className="block text-sm font-medium text-ink/80 mb-1.5">Qəbul haqqı (₼)</label>
             <input type="number" step="0.01" value={consultationFee} onChange={(e) => setConsultationFee(e.target.value)} placeholder="Məsələn: 40" className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
-            <p className="text-xs text-ink/40 mt-1">Kassa ödəniş yazarkən default məbləğ kimi göstəriləcək.</p>
+            <p className="text-xs text-ink/60 mt-1">Kassa ödəniş yazarkən default məbləğ kimi göstəriləcək.</p>
           </div>
         )}
 

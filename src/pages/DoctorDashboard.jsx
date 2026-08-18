@@ -30,7 +30,7 @@ export default function DoctorDashboard() {
     <div>
       <h1 className="font-display text-xl font-semibold text-ink mb-5">Bugünkü növbə</h1>
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : appointments.length === 0 ? (
         <EmptyState title="Növbədə pasiyent yoxdur" hint="Resepşn yeni qəbul əlavə etdikdə burada görünəcək." />
       ) : (
@@ -40,7 +40,7 @@ export default function DoctorDashboard() {
               <Avatar name={a.patient?.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                {a.complaint && <div className="text-sm text-ink/50 truncate">{a.complaint}</div>}
+                {a.complaint && <div className="text-sm text-ink/65 truncate">{a.complaint}</div>}
               </div>
               <StatusBadge status={a.status} />
             </Card>
@@ -182,14 +182,14 @@ function VisitDetail({ appointment, onBack }) {
 
   return (
     <div className="animate-fade-in pb-20">
-      <button onClick={onBack} className="text-sm text-ink/50 hover:text-ink mb-4">← Növbəyə qayıt</button>
+      <button onClick={onBack} className="text-sm text-ink/65 hover:text-ink mb-4">← Növbəyə qayıt</button>
 
       <Card className="mb-4">
         <div className="flex items-center gap-3">
           <Avatar name={appointment.patient.full_name} />
           <div className="flex-1 min-w-0">
             <h2 className="font-display text-lg font-semibold text-ink truncate">{appointment.patient.full_name}</h2>
-            {appointment.complaint && <p className="text-sm text-ink/50 mt-0.5">Şikayət: {appointment.complaint}</p>}
+            {appointment.complaint && <p className="text-sm text-ink/65 mt-0.5">Şikayət: {appointment.complaint}</p>}
           </div>
           <StatusBadge status={appointment.status} />
         </div>
@@ -231,7 +231,7 @@ function VisitDetail({ appointment, onBack }) {
           </div>
 
           {completedLab.length === 0 && pendingLab.length === 0 && (
-            <p className="text-sm text-ink/40 mb-3">Hələ analiz təyin edilməyib.</p>
+            <p className="text-sm text-ink/60 mb-3">Hələ analiz təyin edilməyib.</p>
           )}
 
           {completedLab.map((o) => (
@@ -304,7 +304,7 @@ function TabButton({ active, onClick, children }) {
     <button
       onClick={onClick}
       className={`px-3 pb-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
-        active ? 'border-primary text-primary' : 'border-transparent text-ink/40 hover:text-ink/70'
+        active ? 'border-primary text-primary' : 'border-transparent text-ink/60 hover:text-ink/70'
       }`}
     >
       {children}

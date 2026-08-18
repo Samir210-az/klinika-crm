@@ -37,7 +37,7 @@ export default function ReceptionDashboard() {
       )}
 
       {loading ? (
-        <p className="text-ink/40">Yüklənir…</p>
+        <p className="text-ink/60">Yüklənir…</p>
       ) : appointments.length === 0 ? (
         <EmptyState title="Bu gün üçün qəbul yoxdur" hint="Yeni qəbul əlavə et." />
       ) : (
@@ -47,7 +47,7 @@ export default function ReceptionDashboard() {
               <Avatar name={a.patient?.full_name} />
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                <div className="text-sm text-ink/50">Həkim: {a.doctor?.full_name}</div>
+                <div className="text-sm text-ink/65">Həkim: {a.doctor?.full_name}</div>
               </div>
               <StatusBadge status={a.status} />
             </Card>
@@ -134,7 +134,7 @@ function NewAppointmentForm({ doctors, onClose, onCreated }) {
                     onClick={() => { setSelectedPatient(p); setQuery(p.full_name); setResults([]) }}
                     className="w-full text-left px-3 py-2 text-sm hover:bg-black/5 border-b last:border-0 border-black/5"
                   >
-                    {p.full_name} {p.phone && <span className="text-ink/40">— {p.phone}</span>}
+                    {p.full_name} {p.phone && <span className="text-ink/60">— {p.phone}</span>}
                   </button>
                 ))}
               </div>
