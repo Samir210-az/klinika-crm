@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
-import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
+import { Card, StatusBadge, Button, EmptyState, Avatar, TealCard } from '../components/ui'
 import PatientHistory from '../components/PatientHistory'
 import { FlaskConical, Printer, History } from 'lucide-react'
 
@@ -36,14 +36,14 @@ export default function DoctorDashboard() {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" onClick={() => setSelected(a)}>
-              <Avatar name={a.patient?.full_name} />
+            <TealCard key={a.id} className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setSelected(a)}>
+              <Avatar name={a.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                {a.complaint && <div className="text-sm text-ink/65 truncate">{a.complaint}</div>}
+                <div className="font-medium truncate">{a.patient?.full_name}</div>
+                {a.complaint && <div className="text-sm text-white/70 truncate">{a.complaint}</div>}
               </div>
               <StatusBadge status={a.status} />
-            </Card>
+            </TealCard>
           ))}
         </div>
       )}

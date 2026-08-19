@@ -16,7 +16,7 @@ const ROLE_LABELS = {
   laborant: 'Laborant',
 }
 
-export default function Layout({ children }) {
+export default function Layout({ children, fullHeight = false }) {
   const { employee, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
@@ -43,8 +43,8 @@ export default function Layout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-bg">
-      <header className="bg-surface border-b border-black/[0.06] sticky top-0 z-10">
+    <div className="h-[100dvh] flex flex-col bg-bg overflow-hidden">
+      <header className="shrink-0 bg-surface border-b border-black/[0.06] z-10">
         <div className="max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Logo size={26} className="shrink-0" />
@@ -91,18 +91,24 @@ export default function Layout({ children }) {
           </div>
         </div>
       </header>
-      <main className="max-w-5xl mx-auto px-5 py-6">{children}</main>
 
-      <footer className="max-w-5xl mx-auto px-5 py-6 text-center">
-        <a
-          href="https://instagram.com/securtiy_group"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-ink/50 hover:text-ink/65 transition-colors"
-        >
-          By securtiy_group
-        </a>
-      </footer>
+      {fullHeight ? (
+        <main className="flex-1 min-h-0 overflow-hidden flex flex-col">{children}</main>
+      ) : (
+        <main className="flex-1 min-h-0 overflow-y-auto">
+          <div className="max-w-5xl mx-auto px-5 py-6">{children}</div>
+          <footer className="max-w-5xl mx-auto px-5 py-6 text-center">
+            <a
+              href="https://instagram.com/securtiy_group"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-ink/50 hover:text-ink/65 transition-colors"
+            >
+              By securtiy_group
+            </a>
+          </footer>
+        </main>
+      )}
     </div>
   )
 }

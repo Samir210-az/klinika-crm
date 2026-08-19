@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState, Avatar } from '../components/ui'
+import { Card, Button, EmptyState, Avatar, TealCard } from '../components/ui'
 import { FlaskConical } from 'lucide-react'
 
 export default function LabDashboard() {
@@ -33,14 +33,14 @@ export default function LabDashboard() {
       ) : (
         <div className="space-y-2">
           {orders.map((o) => (
-            <Card key={o.id} className="flex items-center gap-3 cursor-pointer hover:border-primary/20 transition-colors" onClick={() => setSelected(o)}>
-              <Avatar name={o.patient?.full_name} />
+            <TealCard key={o.id} className="flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity" onClick={() => setSelected(o)}>
+              <Avatar name={o.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{o.patient?.full_name}</div>
-                <div className="text-sm text-ink/65 truncate">{o.tests}</div>
+                <div className="font-medium truncate">{o.patient?.full_name}</div>
+                <div className="text-sm text-white/70 truncate">{o.tests}</div>
               </div>
-              <FlaskConical size={18} className="text-primary/40 shrink-0" />
-            </Card>
+              <FlaskConical size={18} className="text-white/50 shrink-0" />
+            </TealCard>
           ))}
         </div>
       )}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Avatar, EmptyState } from './ui'
+import { Avatar, EmptyState, TealCard } from './ui'
 import { FlaskConical } from 'lucide-react'
 
 export default function LabOverview() {
@@ -29,14 +29,14 @@ export default function LabOverview() {
       ) : (
         <div className="space-y-2 mb-8">
           {pending.map((o) => (
-            <Card key={o.id} className="flex items-center gap-3">
-              <Avatar name={o.patient?.full_name} />
+            <TealCard key={o.id} className="flex items-center gap-3">
+              <Avatar name={o.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{o.patient?.full_name}</div>
-                <div className="text-sm text-ink/65 truncate">{o.tests} · Həkim: {o.doctor?.full_name}</div>
+                <div className="font-medium truncate">{o.patient?.full_name}</div>
+                <div className="text-sm text-white/70 truncate">{o.tests} · Həkim: {o.doctor?.full_name}</div>
               </div>
-              <FlaskConical size={16} className="text-warning shrink-0" />
-            </Card>
+              <FlaskConical size={16} className="text-[#f0d9a0] shrink-0" />
+            </TealCard>
           ))}
         </div>
       )}
@@ -47,14 +47,14 @@ export default function LabOverview() {
       ) : (
         <div className="space-y-2">
           {completed.map((o) => (
-            <Card key={o.id} className="flex items-center gap-3">
-              <Avatar name={o.patient?.full_name} />
+            <TealCard key={o.id} className="flex items-center gap-3">
+              <Avatar name={o.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{o.patient?.full_name}</div>
-                <div className="text-sm text-ink/65 truncate">{o.tests} · Həkim: {o.doctor?.full_name}</div>
+                <div className="font-medium truncate">{o.patient?.full_name}</div>
+                <div className="text-sm text-white/70 truncate">{o.tests} · Həkim: {o.doctor?.full_name}</div>
               </div>
-              <FlaskConical size={16} className="text-success shrink-0" />
-            </Card>
+              <FlaskConical size={16} className="text-[#a8e0c8] shrink-0" />
+            </TealCard>
           ))}
         </div>
       )}

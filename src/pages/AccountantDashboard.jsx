@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState, StatCard, Avatar } from '../components/ui'
+import { Card, Button, EmptyState, StatCard, Avatar, TealCard } from '../components/ui'
 import { Wallet, CalendarClock, FlaskConical } from 'lucide-react'
 
 export default function AccountantDashboard() {
@@ -58,14 +58,14 @@ export default function AccountantDashboard() {
       ) : (
         <div className="space-y-2 mb-8">
           {unpaid.map((a) => (
-            <Card key={a.id} className="flex items-center gap-3">
-              <Avatar name={a.patient?.full_name} />
+            <TealCard key={a.id} className="flex items-center gap-3">
+              <Avatar name={a.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                <div className="text-sm text-ink/65">Həkim: {a.doctor?.full_name}</div>
+                <div className="font-medium truncate">{a.patient?.full_name}</div>
+                <div className="text-sm text-white/70">Həkim: {a.doctor?.full_name}</div>
               </div>
-              <Button onClick={() => setActiveAppt(a)}>Ödəniş yaz</Button>
-            </Card>
+              <button onClick={() => setActiveAppt(a)} className="rounded-lg px-3.5 py-2 text-sm font-medium bg-white text-primary hover:bg-white/90 transition-colors">Ödəniş yaz</button>
+            </TealCard>
           ))}
         </div>
       )}
@@ -78,14 +78,14 @@ export default function AccountantDashboard() {
           </h2>
           <div className="space-y-2 mb-8">
             {unpaidLab.map((o) => (
-              <Card key={o.id} className="flex items-center gap-3">
-                <Avatar name={o.patient?.full_name} />
+              <TealCard key={o.id} className="flex items-center gap-3">
+                <Avatar name={o.patient?.full_name} dark />
                 <div className="flex-1 min-w-0">
-                  <div className="font-medium text-ink truncate">{o.patient?.full_name}</div>
-                  <div className="text-sm text-ink/65 truncate">{o.tests}</div>
+                  <div className="font-medium truncate">{o.patient?.full_name}</div>
+                  <div className="text-sm text-white/70 truncate">{o.tests}</div>
                 </div>
-                <Button onClick={() => setActiveLabOrder(o)}>Ödəniş yaz</Button>
-              </Card>
+                <button onClick={() => setActiveLabOrder(o)} className="rounded-lg px-3.5 py-2 text-sm font-medium bg-white text-primary hover:bg-white/90 transition-colors">Ödəniş yaz</button>
+              </TealCard>
             ))}
           </div>
         </>

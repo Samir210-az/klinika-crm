@@ -49,7 +49,7 @@ function ChatRoute() {
   const { isAuthed } = useAuth()
   if (!isAuthed) return <Navigate to="/login" replace />
   return (
-    <Layout>
+    <Layout fullHeight>
       <Chat />
     </Layout>
   )

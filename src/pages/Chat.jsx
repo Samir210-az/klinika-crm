@@ -38,11 +38,11 @@ export default function Chat() {
   }, [loadUnread])
 
   return (
-    <div className="flex h-[calc(100vh-64px-73px)] md:rounded-2xl md:border md:border-black/[0.06] overflow-hidden">
-      <aside className="w-28 md:w-56 shrink-0 border-r border-black/[0.06] bg-surface overflow-y-auto">
+    <div className="flex h-full min-h-0 md:m-3 md:rounded-2xl md:border md:border-black/[0.06] overflow-hidden">
+      <aside className="w-16 md:w-56 shrink-0 border-r border-black/[0.06] bg-surface overflow-y-auto">
         <button
           onClick={() => setActiveConversation('general')}
-          className={`w-full flex items-center gap-2 px-3 py-3 text-left border-b border-black/5 ${
+          className={`w-full flex items-center justify-center md:justify-start gap-2 px-2 md:px-3 py-3 text-left border-b border-black/5 ${
             activeConversation === 'general' ? 'bg-primary-light' : 'hover:bg-black/[0.02]'
           }`}
         >
@@ -59,7 +59,7 @@ export default function Chat() {
           <button
             key={c.id}
             onClick={() => setActiveConversation(c.id)}
-            className={`w-full flex items-center gap-2 px-3 py-3 text-left border-b border-black/5 ${
+            className={`w-full flex items-center justify-center md:justify-start gap-2 px-2 md:px-3 py-3 text-left border-b border-black/5 ${
               activeConversation === c.id ? 'bg-primary-light' : 'hover:bg-black/[0.02]'
             }`}
           >
@@ -158,17 +158,17 @@ function ConversationView({ conversation, title, onRead }) {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleSend} className="p-3 border-t border-black/[0.06] bg-surface flex gap-2">
+      <form onSubmit={handleSend} className="min-w-0 p-3 border-t border-black/[0.06] bg-surface flex gap-2">
         <input
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Mesaj yaz…"
-          className="flex-1 rounded-xl border border-black/10 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+          className="min-w-0 flex-1 rounded-xl border border-black/10 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
         />
         <button
           type="submit"
           disabled={sending || !text.trim()}
-          className="rounded-xl bg-primary text-white px-4 flex items-center justify-center disabled:opacity-50"
+          className="shrink-0 rounded-xl bg-primary text-white px-4 flex items-center justify-center disabled:opacity-50"
         >
           <Send size={17} />
         </button>

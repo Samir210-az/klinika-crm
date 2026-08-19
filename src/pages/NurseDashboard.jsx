@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, StatusBadge, Button, EmptyState, Avatar } from '../components/ui'
+import { Card, StatusBadge, Button, EmptyState, Avatar, TealCard } from '../components/ui'
 
 export default function NurseDashboard() {
   const [doctorId, setDoctorId] = useState(null)
@@ -50,14 +50,14 @@ export default function NurseDashboard() {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center gap-3">
-              <Avatar name={a.patient?.full_name} />
+            <TealCard key={a.id} className="flex items-center gap-3">
+              <Avatar name={a.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                {a.complaint && <div className="text-sm text-ink/65 truncate">{a.complaint}</div>}
+                <div className="font-medium truncate">{a.patient?.full_name}</div>
+                {a.complaint && <div className="text-sm text-white/70 truncate">{a.complaint}</div>}
               </div>
               <StatusBadge status={a.status} />
-            </Card>
+            </TealCard>
           ))}
         </div>
       )}
