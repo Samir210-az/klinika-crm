@@ -54,7 +54,7 @@ export default function Layout({ children, fullHeight = false }) {
         />
         <div className="relative max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Logo size={26} serpentColor="#ffffff" cupColor="#e8c078" className="shrink-0" />
+            <Logo size={40} serpentColor="#ffffff" cupColor="#e8c078" className="shrink-0" />
             <div className="w-px h-8 bg-white/15 hidden sm:block" />
             <Avatar name={employee?.full_name} dark />
             <div>
