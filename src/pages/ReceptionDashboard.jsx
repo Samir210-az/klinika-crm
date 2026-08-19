@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { Card, StatusBadge, Button, EmptyState, Avatar, TealCard } from '../components/ui'
+import AccountantDashboard from './AccountantDashboard'
 
 export default function ReceptionDashboard() {
+  const [tab, setTab] = useState('appointments')
   const [appointments, setAppointments] = useState([])
   const [doctors, setDoctors] = useState([])
   const [loading, setLoading] = useState(true)
@@ -25,8 +27,25 @@ export default function ReceptionDashboard() {
     load()
   }, [load])
 
+  if (tab === 'kassa') {
+    return (
+      <div>
+        <div className="flex gap-2 mb-6">
+          <TabButton active={false} onClick={() => setTab('appointments')}>Qəbullar</TabButton>
+          <TabButton active={true} onClick={() => setTab('kassa')}>Kassa</TabButton>
+        </div>
+        <AccountantDashboard />
+      </div>
+    )
+  }
+
   return (
     <div>
+      <div className="flex gap-2 mb-6">
+        <TabButton active={true} onClick={() => setTab('appointments')}>Qəbullar</TabButton>
+        <TabButton active={false} onClick={() => setTab('kassa')}>Kassa</TabButton>
+      </div>
+
       <div className="flex items-center justify-between mb-5">
         <h1 className="font-display text-xl font-semibold text-ink">Bugünkü qəbullar</h1>
         <Button onClick={() => setShowForm(true)}>+ Yeni qəbul</Button>
@@ -55,6 +74,19 @@ export default function ReceptionDashboard() {
         </div>
       )}
     </div>
+  )
+}
+
+function TabButton({ active, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`shrink-0 whitespace-nowrap rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+        active ? 'bg-primary text-white' : 'bg-surface text-ink/70 border border-black/10'
+      }`}
+    >
+      {children}
+    </button>
   )
 }
 

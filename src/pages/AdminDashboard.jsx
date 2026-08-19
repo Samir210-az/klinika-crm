@@ -6,6 +6,7 @@ import PatientsPanel from '../components/PatientsPanel'
 import EmployeeDetail from '../components/EmployeeDetail'
 import AttendanceAdmin from '../components/AttendanceAdmin'
 import LabOverview from '../components/LabOverview'
+import AccountantDashboard from './AccountantDashboard'
 import { Wallet, CalendarClock, Users, Stethoscope } from 'lucide-react'
 
 export default function AdminDashboard() {
@@ -26,6 +27,7 @@ export default function AdminDashboard() {
       <div className="relative -mx-5 px-5 mb-6">
         <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
+          <TabButton active={tab === 'kassa'} onClick={() => setTab('kassa')}>Kassa</TabButton>
           <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
           <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
           <TabButton active={tab === 'lab'} onClick={() => setTab('lab')}>Laboratoriya</TabButton>
@@ -35,6 +37,7 @@ export default function AdminDashboard() {
       </div>
 
       {tab === 'stats' && <StatsView onSelectDoctor={setViewDoctorId} />}
+      {tab === 'kassa' && <AccountantDashboard />}
       {tab === 'employees' && <EmployeesPanel />}
       {tab === 'patients' && <PatientsPanel />}
       {tab === 'lab' && <LabOverview />}

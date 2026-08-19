@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     if (session.role === 'doctor') {
       // Həkim yalnız öz ödənişlərini görür, başqasınınkını yox
       query = query.eq('doctor_id', session.id)
-    } else if (!['accountant', 'hr', 'director'].includes(session.role)) {
+    } else if (!['accountant', 'hr', 'director', 'reception'].includes(session.role)) {
       return res.status(403).json({ error: 'Bu əməliyyat üçün icazəniz yoxdur.' })
     } else if (req.query.doctor_id) {
       query = query.eq('doctor_id', req.query.doctor_id)
