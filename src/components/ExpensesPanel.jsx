@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { Button, EmptyState, TealCard } from './ui'
-import { Plus, Wallet, Gift, Receipt } from 'lucide-react'
+import { Plus, Wallet, Gift, Receipt, Printer, FileDown } from 'lucide-react'
+import { printReport, downloadCsv, escapeHtml } from '../lib/reportExport'
 
 const TYPE_LABELS = { salary: 'Əmək haqqı', expense: 'Xərc', bonus: 'Mükafat' }
 const TYPE_ICONS = { salary: Wallet, expense: Receipt, bonus: Gift }
@@ -13,6 +14,7 @@ export default function ExpensesPanel() {
   const [showForm, setShowForm] = useState(false)
   const [filterType, setFilterType] = useState('')
   const [error, setError] = useState(null)
+  const [exporting, setExporting] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -35,13 +37,56 @@ export default function ExpensesPanel() {
     load()
   }, [load])
 
+  async function handleFullReport() {
+    setExporting(true)
+    try {
+      const [statsData, allEntries] = await Promise.all([
+        apiRequest('/stats/summary'),
+        apiRequest('/finance-entries'),
+      ])
+      printFinancialReport(statsData, allEntries.entries)
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  function handleSalaryPrint() {
+    printSalaryList(entries.filter((e) => e.type === 'salary'))
+  }
+
+  function handleSalaryCsv() {
+    exportEntriesCsv(entries.filter((e) => e.type === 'salary'), 'emek-haqqi')
+  }
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-3">
         <h1 className="font-display text-xl font-semibold text-ink">Xərclər · Əmək haqqı · Mükafat</h1>
         <Button onClick={() => setShowForm(true)} className="flex items-center gap-1.5">
           <Plus size={15} /> Yeni qeyd
         </Button>
+      </div>
+
+      <div className="flex flex-wrap gap-2 mb-5">
+        <button
+          onClick={handleFullReport}
+          disabled={exporting}
+          className="flex items-center gap-1.5 text-sm text-ink/70 hover:text-ink rounded-lg px-3 py-1.5 border border-black/10 bg-surface transition-colors disabled:opacity-50"
+        >
+          <Printer size={14} /> {exporting ? 'Hazırlanır…' : 'Tam maliyyə hesabatı'}
+        </button>
+        <button
+          onClick={handleSalaryPrint}
+          className="flex items-center gap-1.5 text-sm text-ink/70 hover:text-ink rounded-lg px-3 py-1.5 border border-black/10 bg-surface transition-colors"
+        >
+          <Printer size={14} /> Əmək haqqı siyahısı
+        </button>
+        <button
+          onClick={handleSalaryCsv}
+          className="flex items-center gap-1.5 text-sm text-ink/70 hover:text-ink rounded-lg px-3 py-1.5 border border-black/10 bg-surface transition-colors"
+        >
+          <FileDown size={14} /> Excel (CSV)
+        </button>
       </div>
 
       <div className="flex gap-2 mb-5 overflow-x-auto pb-1">
@@ -86,6 +131,87 @@ export default function ExpensesPanel() {
         </div>
       )}
     </div>
+  )
+}
+
+function printFinancialReport(stats, entries) {
+  const salaryTotal = entries.filter((e) => e.type === 'salary').reduce((s, e) => s + Number(e.amount), 0)
+  const expenseTotal = entries.filter((e) => e.type === 'expense').reduce((s, e) => s + Number(e.amount), 0)
+  const bonusTotal = entries.filter((e) => e.type === 'bonus').reduce((s, e) => s + Number(e.amount), 0)
+
+  const entryRows = entries
+    .map(
+      (e) => `<tr>
+        <td>${new Date(e.entry_date).toLocaleDateString('az-AZ')}</td>
+        <td>${escapeHtml(TYPE_LABELS[e.type])}</td>
+        <td>${escapeHtml(e.employee_name || e.category || '—')}</td>
+        <td>${escapeHtml(e.description || '')}</td>
+        <td style="text-align:right">${Number(e.amount).toFixed(2)} ₼</td>
+      </tr>`
+    )
+    .join('')
+
+  printReport(
+    'Tam maliyyə hesabatı',
+    `<div class="meta">Tarix: ${new Date().toLocaleDateString('az-AZ')}</div>
+    <div class="stat-row">
+      <div class="stat"><div class="label">Aylıq dövriyyə</div><div class="value">${stats.month_total.toFixed(2)} ₼</div></div>
+      <div class="stat"><div class="label">Aylıq xərc</div><div class="value">-${stats.month_expenses.toFixed(2)} ₼</div></div>
+      <div class="stat"><div class="label">Xalis qazanc</div><div class="value">${stats.month_net.toFixed(2)} ₼</div></div>
+    </div>
+    <div class="section-title">Xərc bölgüsü</div>
+    <table>
+      <thead><tr><th>Növ</th><th style="text-align:right">Məbləğ</th></tr></thead>
+      <tbody>
+        <tr><td>Əmək haqqı</td><td style="text-align:right">${salaryTotal.toFixed(2)} ₼</td></tr>
+        <tr><td>Xərc</td><td style="text-align:right">${expenseTotal.toFixed(2)} ₼</td></tr>
+        <tr><td>Mükafat</td><td style="text-align:right">${bonusTotal.toFixed(2)} ₼</td></tr>
+      </tbody>
+    </table>
+    <div class="section-title">Bütün qeydlər</div>
+    <table>
+      <thead><tr><th>Tarix</th><th>Növ</th><th>Kim/Kateqoriya</th><th>Qeyd</th><th style="text-align:right">Məbləğ</th></tr></thead>
+      <tbody>${entryRows}</tbody>
+    </table>`
+  )
+}
+
+function printSalaryList(salaryEntries) {
+  const rows = salaryEntries
+    .map(
+      (e) => `<tr>
+        <td>${escapeHtml(e.employee_name || '—')}</td>
+        <td>${new Date(e.entry_date).toLocaleDateString('az-AZ')}</td>
+        <td>${escapeHtml(e.description || '')}</td>
+        <td style="text-align:right">${Number(e.amount).toFixed(2)} ₼</td>
+      </tr>`
+    )
+    .join('')
+  const total = salaryEntries.reduce((s, e) => s + Number(e.amount), 0)
+
+  printReport(
+    'Əmək haqqı siyahısı',
+    `<div class="meta">Tarix: ${new Date().toLocaleDateString('az-AZ')} · ${salaryEntries.length} qeyd</div>
+    <table>
+      <thead><tr><th>Əməkdaş</th><th>Tarix</th><th>Qeyd</th><th style="text-align:right">Məbləğ</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td colspan="3">Cəmi</td><td style="text-align:right">${total.toFixed(2)} ₼</td></tr></tfoot>
+    </table>`
+  )
+}
+
+function exportEntriesCsv(entries, prefix) {
+  const rows = entries.map((e) => [
+    new Date(e.entry_date).toLocaleDateString('az-AZ'),
+    TYPE_LABELS[e.type],
+    e.employee_name || e.category || '',
+    e.description || '',
+    Number(e.amount).toFixed(2),
+  ])
+  downloadCsv(
+    `${prefix}-${new Date().toISOString().slice(0, 10)}.csv`,
+    ['Tarix', 'Növ', 'Kim/Kateqoriya', 'Qeyd', 'Məbləğ'],
+    rows
   )
 }
 

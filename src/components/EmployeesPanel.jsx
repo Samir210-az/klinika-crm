@@ -2,7 +2,8 @@ import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
 import { Card, Button, EmptyState, Avatar, TealCard } from './ui'
 import EmployeeDetail from './EmployeeDetail'
-import { Trash2, Plus } from 'lucide-react'
+import { Trash2, Plus, Printer, FileDown } from 'lucide-react'
+import { printReport, downloadCsv, escapeHtml } from '../lib/reportExport'
 
 const ROLE_LABELS = {
   reception: 'Resepşn',
@@ -86,12 +87,29 @@ export default function EmployeesPanel() {
 
       {!selectedId && (
       <>
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-3">
         <h1 className="font-display text-xl font-semibold text-ink">Əməkdaşlar</h1>
         <Button onClick={() => setShowForm(true)} className="flex items-center gap-1.5">
           <Plus size={15} /> Yeni əməkdaş
         </Button>
       </div>
+
+      {employees.length > 0 && (
+        <div className="flex gap-2 mb-5">
+          <button
+            onClick={() => printEmployeeList(employees)}
+            className="flex items-center gap-1.5 text-sm text-ink/70 hover:text-ink rounded-lg px-3 py-1.5 border border-black/10 bg-surface transition-colors"
+          >
+            <Printer size={14} /> Çap et
+          </button>
+          <button
+            onClick={() => exportEmployeeCsv(employees)}
+            className="flex items-center gap-1.5 text-sm text-ink/70 hover:text-ink rounded-lg px-3 py-1.5 border border-black/10 bg-surface transition-colors"
+          >
+            <FileDown size={14} /> Excel (CSV)
+          </button>
+        </div>
+      )}
 
       {showForm && (
         <NewEmployeeForm
@@ -247,5 +265,45 @@ function NewEmployeeForm({ doctors, onClose, onCreated }) {
         </div>
       </form>
     </Card>
+  )
+}
+
+function printEmployeeList(employees) {
+  const rows = employees
+    .map(
+      (e) => `
+    <tr>
+      <td>${escapeHtml(e.full_name)}</td>
+      <td>${escapeHtml(ROLE_LABELS[e.role] || e.role)}</td>
+      <td>${escapeHtml(e.department || '—')}</td>
+      <td>${escapeHtml(e.phone)}</td>
+      <td>${e.is_active ? 'Aktiv' : 'Deaktiv'}</td>
+    </tr>`
+    )
+    .join('')
+
+  printReport(
+    'Əməkdaşlar siyahısı',
+    `<div class="meta">Tarix: ${new Date().toLocaleDateString('az-AZ')} · Cəmi: ${employees.length} əməkdaş</div>
+    <table>
+      <thead><tr><th>Ad Soyad</th><th>Rol</th><th>Şöbə/İxtisas</th><th>Telefon</th><th>Status</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`
+  )
+}
+
+function exportEmployeeCsv(employees) {
+  const rows = employees.map((e) => [
+    e.full_name,
+    ROLE_LABELS[e.role] || e.role,
+    e.department || '',
+    e.phone,
+    e.is_active ? 'Aktiv' : 'Deaktiv',
+    e.consultation_fee != null ? e.consultation_fee : '',
+  ])
+  downloadCsv(
+    `emekdaslar-${new Date().toISOString().slice(0, 10)}.csv`,
+    ['Ad Soyad', 'Rol', 'Şöbə/İxtisas', 'Telefon', 'Status', 'Qəbul haqqı'],
+    rows
   )
 }
