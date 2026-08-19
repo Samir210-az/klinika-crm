@@ -104,12 +104,12 @@ export default function Layout({ children, fullHeight = false }) {
       ) : (
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-5xl mx-auto px-5 py-6">{children}</div>
-          <footer className="max-w-5xl mx-auto px-5 py-6 text-center">
+          <footer className="bg-primary py-6 text-center mt-4">
             <a
               href="https://instagram.com/securtiy_group"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-ink/50 hover:text-ink/65 transition-colors"
+              className="text-xs text-white/70 hover:text-white transition-colors"
             >
               By securtiy_group
             </a>
