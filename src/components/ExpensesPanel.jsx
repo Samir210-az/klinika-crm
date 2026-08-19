@@ -12,16 +12,23 @@ export default function ExpensesPanel() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [filterType, setFilterType] = useState('')
+  const [error, setError] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
-    const [entriesData, employeesData] = await Promise.all([
-      apiRequest(`/finance-entries${filterType ? `?type=${filterType}` : ''}`),
-      apiRequest('/employees'),
-    ])
-    setEntries(entriesData.entries)
-    setEmployees(employeesData.employees)
-    setLoading(false)
+    setError(null)
+    try {
+      const [entriesData, employeesData] = await Promise.all([
+        apiRequest(`/finance-entries${filterType ? `?type=${filterType}` : ''}`),
+        apiRequest('/employees'),
+      ])
+      setEntries(entriesData.entries)
+      setEmployees(employeesData.employees)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
   }, [filterType])
 
   useEffect(() => {
@@ -46,7 +53,9 @@ export default function ExpensesPanel() {
 
       {showForm && <NewEntryForm employees={employees} onClose={() => setShowForm(false)} onCreated={load} />}
 
-      {loading ? (
+      {error ? (
+        <p className="text-danger text-sm">{error}</p>
+      ) : loading ? (
         <p className="text-ink/60">Yüklənir…</p>
       ) : entries.length === 0 ? (
         <EmptyState title="Hələ qeyd yoxdur" />

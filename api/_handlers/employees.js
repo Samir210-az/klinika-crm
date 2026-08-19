@@ -3,6 +3,7 @@ import { getSupabaseAdmin } from '../_lib/supabaseAdmin.js'
 import { requireRole, getSession } from '../_lib/auth.js'
 
 const FULL_ACCESS_ROLES = ['hr', 'director']
+const GET_ACCESS_ROLES = ['hr', 'director', 'accountant']
 
 export default async function handler(req, res) {
   const supabase = getSupabaseAdmin()
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
     const session = getSession(req)
     if (!session) return res.status(401).json({ error: 'Giriş tələb olunur.' })
 
-    if (FULL_ACCESS_ROLES.includes(session.role)) {
+    if (GET_ACCESS_ROLES.includes(session.role)) {
       const { data, error } = await supabase
         .from('employees')
         .select('id, full_name, phone, role, department, consultation_fee, supervising_doctor_id, is_active, created_at')

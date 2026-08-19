@@ -17,24 +17,31 @@ export default function AccountantDashboard() {
   const [activeAppt, setActiveAppt] = useState(null)
   const [activeLabOrder, setActiveLabOrder] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
 
   const today = new Date().toISOString().slice(0, 10)
 
   const load = useCallback(async () => {
     setLoading(true)
-    const [statsData, apptData, paymentsData, labData, labPaymentsData] = await Promise.all([
-      apiRequest('/stats/summary'),
-      apiRequest(`/appointments?date=${today}&status=completed`),
-      apiRequest(`/payments?from=${today}T00:00:00&type=consultation`),
-      apiRequest('/lab-orders?status=completed'),
-      apiRequest('/payments?type=lab'),
-    ])
-    setStats(statsData)
-    setCompleted(apptData.appointments)
-    setPaidApptIds(new Set(paymentsData.payments.map((p) => p.appointment_id).filter(Boolean)))
-    setLabOrders(labData.lab_orders)
+    setLoadError(null)
+    try {
+      const [statsData, apptData, paymentsData, labData, labPaymentsData] = await Promise.all([
+        apiRequest('/stats/summary'),
+        apiRequest(`/appointments?date=${today}&status=completed`),
+        apiRequest(`/payments?from=${today}T00:00:00&type=consultation`),
+        apiRequest('/lab-orders?status=completed'),
+        apiRequest('/payments?type=lab'),
+      ])
+      setStats(statsData)
+      setCompleted(apptData.appointments)
+      setPaidApptIds(new Set(paymentsData.payments.map((p) => p.appointment_id).filter(Boolean)))
+      setLabOrders(labData.lab_orders)
     setPaidLabOrderIds(new Set(labPaymentsData.payments.map((p) => p.lab_order_id).filter(Boolean)))
-    setLoading(false)
+    } catch (e) {
+      setLoadError(e.message)
+    } finally {
+      setLoading(false)
+    }
   }, [today])
 
   useEffect(() => {
@@ -81,7 +88,9 @@ export default function AccountantDashboard() {
       )}
 
       <h2 className="font-display text-lg font-semibold text-ink mb-3">Ödənişi gözləyən müayinələr</h2>
-      {loading ? (
+      {loadError ? (
+        <p className="text-danger text-sm mb-3">{loadError}</p>
+      ) : loading ? (
         <p className="text-ink/60">Yüklənir…</p>
       ) : unpaid.length === 0 ? (
         <EmptyState title="Ödənişi gözləyən müayinə yoxdur" />
