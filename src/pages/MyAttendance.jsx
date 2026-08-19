@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, Button, EmptyState } from '../components/ui'
+import { Card, Button, EmptyState, TealCard } from '../components/ui'
 import { Clock, CalendarPlus } from 'lucide-react'
 
 const TYPE_LABELS = { vacation: 'Məzuniyyət', sick: 'Xəstəlik', other: 'Digər' }
@@ -56,31 +56,31 @@ export default function MyAttendance() {
     <div>
       <h1 className="font-display text-xl font-semibold text-ink mb-5">Davamiyyətim</h1>
 
-      <Card className="mb-6">
+      <TealCard className="mb-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-primary-light text-primary flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center">
             <Clock size={18} />
           </div>
           <div>
-            <div className="text-sm text-ink/65">Bugün</div>
-            <div className="text-sm text-ink">
+            <div className="text-sm text-white/70">Bugün</div>
+            <div className="text-sm">
               Giriş: <span className="font-medium">{formatTime(today?.check_in_at)}</span>
               {'  ·  '}
               Çıxış: <span className="font-medium">{formatTime(today?.check_out_at)}</span>
             </div>
             {today?.late_minutes > 0 && (
-              <div className="text-xs text-warning mt-0.5">{today.late_minutes} dəqiqə gecikmə</div>
+              <div className="text-xs text-[#f0d9a0] mt-0.5">{today.late_minutes} dəqiqə gecikmə</div>
             )}
           </div>
         </div>
-        <Button
+        <button
           onClick={handleToggle}
           disabled={toggling || (today?.check_in_at && today?.check_out_at)}
-          className="w-full py-3"
+          className="w-full py-3 rounded-lg bg-white text-primary font-medium hover:bg-white/90 disabled:opacity-50 transition-colors"
         >
           {toggling ? 'Yadda saxlanılır…' : buttonLabel}
-        </Button>
-      </Card>
+        </button>
+      </TealCard>
 
       <div className="flex items-center justify-between mb-3">
         <h2 className="font-display text-lg font-semibold text-ink">Məzuniyyət sorğuları</h2>
@@ -96,15 +96,15 @@ export default function MyAttendance() {
       ) : (
         <div className="space-y-2 mb-8">
           {leaveRequests.map((l) => (
-            <Card key={l.id} className="flex items-center justify-between">
+            <TealCard key={l.id} className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-ink">
+                <div className="text-sm font-medium">
                   {new Date(l.start_date).toLocaleDateString('az-AZ')} — {new Date(l.end_date).toLocaleDateString('az-AZ')}
                 </div>
-                <div className="text-xs text-ink/60">{TYPE_LABELS[l.type]}{l.reason && ` · ${l.reason}`}</div>
+                <div className="text-xs text-white/60">{TYPE_LABELS[l.type]}{l.reason && ` · ${l.reason}`}</div>
               </div>
-              <span className={`text-xs font-medium ${STATUS_STYLES[l.status]}`}>{STATUS_LABELS[l.status]}</span>
-            </Card>
+              <span className="text-xs font-medium bg-white/15 rounded-full px-2.5 py-1">{STATUS_LABELS[l.status]}</span>
+            </TealCard>
           ))}
         </div>
       )}

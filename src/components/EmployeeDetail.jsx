@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
-import { Card, StatusBadge, Avatar, EmptyState, StatCard } from './ui'
+import { Card, StatusBadge, Avatar, EmptyState, StatCard, TealCard } from './ui'
 import { Wallet, CalendarClock, Stethoscope } from 'lucide-react'
 
 const ROLE_LABELS = {
@@ -39,17 +39,17 @@ export default function EmployeeDetail({ employeeId }) {
 
   return (
     <div>
-      <Card className="mb-4 flex items-center gap-3">
-        <Avatar name={employee.full_name} />
+      <TealCard className="mb-4 flex items-center gap-3">
+        <Avatar name={employee.full_name} dark />
         <div>
-          <div className="font-display text-lg font-semibold text-ink">{employee.full_name}</div>
-          <div className="text-sm text-ink/65">
+          <div className="font-display text-lg font-semibold">{employee.full_name}</div>
+          <div className="text-sm text-white/70">
             {ROLE_LABELS[employee.role]}
             {employee.department && ` · ${employee.department}`}
             {' · '}{employee.phone}
           </div>
         </div>
-      </Card>
+      </TealCard>
 
       {employee.role === 'doctor' && (
         <div className="grid grid-cols-2 gap-3 mb-4">
@@ -66,15 +66,15 @@ export default function EmployeeDetail({ employeeId }) {
       ) : (
         <div className="space-y-2">
           {appointments.map((a) => (
-            <Card key={a.id} className="flex items-center gap-3">
-              <Avatar name={a.patient?.full_name} />
+            <TealCard key={a.id} className="flex items-center gap-3">
+              <Avatar name={a.patient?.full_name} dark />
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-ink truncate">{a.patient?.full_name}</div>
-                <div className="text-xs text-ink/60">{new Date(a.scheduled_at).toLocaleDateString('az-AZ')}</div>
-                {a.diagnosis && <div className="text-sm text-ink/60 mt-0.5 truncate">{a.diagnosis}</div>}
+                <div className="font-medium truncate">{a.patient?.full_name}</div>
+                <div className="text-xs text-white/60">{new Date(a.scheduled_at).toLocaleDateString('az-AZ')}</div>
+                {a.diagnosis && <div className="text-sm text-white/70 mt-0.5 truncate">{a.diagnosis}</div>}
               </div>
               <StatusBadge status={a.status} />
-            </Card>
+            </TealCard>
           ))}
         </div>
       )}
