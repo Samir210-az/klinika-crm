@@ -28,6 +28,7 @@ import leaveRequestsId from './_handlers/leave-requests-id.js'
 import messages from './_handlers/messages.js'
 import messagesRead from './_handlers/messages-read.js'
 import messagesUnread from './_handlers/messages-unread.js'
+import personnelOrders from './_handlers/personnel-orders.js'
 
 export default async function handler(req, res) {
   const rawPath = req.query.path
@@ -88,6 +89,8 @@ export default async function handler(req, res) {
     if (b === 'unread') return messagesUnread(req, res)
     return messages(req, res)
   }
+
+  if (a === 'personnel-orders') return personnelOrders(req, res)
 
   return res.status(404).json({ error: 'Marşrut tapılmadı.' })
 }

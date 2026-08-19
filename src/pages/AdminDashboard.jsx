@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
 import { apiRequest } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
 import { Card, StatCard, TealCard } from '../components/ui'
 import EmployeesPanel from '../components/EmployeesPanel'
 import PatientsPanel from '../components/PatientsPanel'
 import EmployeeDetail from '../components/EmployeeDetail'
 import AttendanceAdmin from '../components/AttendanceAdmin'
 import LabOverview from '../components/LabOverview'
+import PersonnelOrders from '../components/PersonnelOrders'
 import AccountantDashboard from './AccountantDashboard'
 import { Wallet, CalendarClock, Users, Stethoscope } from 'lucide-react'
 
 export default function AdminDashboard() {
-  const [tab, setTab] = useState('stats')
+  const { employee } = useAuth()
+  const isDirector = employee.role === 'director'
+  const [tab, setTab] = useState(isDirector ? 'stats' : 'employees')
   const [viewDoctorId, setViewDoctorId] = useState(null)
 
   if (viewDoctorId) {
@@ -26,9 +30,10 @@ export default function AdminDashboard() {
     <div>
       <div className="relative -mx-5 px-5 mb-6">
         <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>
-          <TabButton active={tab === 'kassa'} onClick={() => setTab('kassa')}>Kassa</TabButton>
+          {isDirector && <TabButton active={tab === 'stats'} onClick={() => setTab('stats')}>Göstəricilər</TabButton>}
+          {isDirector && <TabButton active={tab === 'kassa'} onClick={() => setTab('kassa')}>Kassa</TabButton>}
           <TabButton active={tab === 'employees'} onClick={() => setTab('employees')}>Əməkdaşlar</TabButton>
+          <TabButton active={tab === 'orders'} onClick={() => setTab('orders')}>Əmrlər</TabButton>
           <TabButton active={tab === 'patients'} onClick={() => setTab('patients')}>Pasiyentlər</TabButton>
           <TabButton active={tab === 'lab'} onClick={() => setTab('lab')}>Laboratoriya</TabButton>
           <TabButton active={tab === 'attendance'} onClick={() => setTab('attendance')}>Davamiyyət</TabButton>
@@ -36,9 +41,10 @@ export default function AdminDashboard() {
         <div className="pointer-events-none absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-bg to-transparent" />
       </div>
 
-      {tab === 'stats' && <StatsView onSelectDoctor={setViewDoctorId} />}
-      {tab === 'kassa' && <AccountantDashboard />}
+      {tab === 'stats' && isDirector && <StatsView onSelectDoctor={setViewDoctorId} />}
+      {tab === 'kassa' && isDirector && <AccountantDashboard />}
       {tab === 'employees' && <EmployeesPanel />}
+      {tab === 'orders' && <PersonnelOrders />}
       {tab === 'patients' && <PatientsPanel />}
       {tab === 'lab' && <LabOverview />}
       {tab === 'attendance' && <AttendanceAdmin />}
