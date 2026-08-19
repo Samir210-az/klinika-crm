@@ -1,14 +1,34 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Download } from 'lucide-react'
 import Logo from '../components/Logo'
+import { getInstallPrompt, triggerInstall, isIos, isStandalone } from '../lib/pwaInstall'
 
 export default function Login() {
   const [phone, setPhone] = useState('')
   const [pin, setPin] = useState('')
   const { login, loading, error } = useAuth()
   const navigate = useNavigate()
+  const [canInstall, setCanInstall] = useState(false)
+  const [showIosHint, setShowIosHint] = useState(false)
+
+  useEffect(() => {
+    if (isStandalone()) return
+    if (getInstallPrompt() || isIos()) setCanInstall(true)
+    const onAvailable = () => setCanInstall(true)
+    window.addEventListener('pwa-install-available', onAvailable)
+    return () => window.removeEventListener('pwa-install-available', onAvailable)
+  }, [])
+
+  async function handleInstall() {
+    if (isIos()) {
+      setShowIosHint(true)
+      return
+    }
+    await triggerInstall()
+    setCanInstall(false)
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -114,6 +134,27 @@ export default function Login() {
           >
             By securtiy_group
           </a>
+
+          {canInstall && (
+            <button
+              type="button"
+              onClick={handleInstall}
+              className="w-full flex items-center justify-center gap-1.5 text-xs text-primary font-medium mt-3"
+            >
+              <Download size={13} /> Tətbiqi telefona yüklə
+            </button>
+          )}
+
+          {showIosHint && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-30" onClick={() => setShowIosHint(false)}>
+              <div className="bg-surface rounded-2xl p-5 max-w-xs text-center" onClick={(e) => e.stopPropagation()}>
+                <p className="text-sm text-ink mb-3">
+                  Safari-də aşağıdakı <strong>Paylaş</strong> düyməsinə bas, sonra <strong>"Ana ekrana əlavə et"</strong> seç.
+                </p>
+                <button type="button" onClick={() => setShowIosHint(false)} className="text-sm text-primary font-medium">Bağla</button>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </div>

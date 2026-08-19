@@ -4,7 +4,8 @@ import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { apiRequest } from '../lib/api'
 import { Avatar } from './ui'
 import Logo from './Logo'
-import { LogOut, Clock, MessageCircle } from 'lucide-react'
+import { getInstallPrompt, triggerInstall, isIos, isStandalone } from '../lib/pwaInstall'
+import { LogOut, Clock, MessageCircle, Download } from 'lucide-react'
 
 const ROLE_LABELS = {
   reception: 'Resepşn',
@@ -21,6 +22,25 @@ export default function Layout({ children, fullHeight = false }) {
   const navigate = useNavigate()
   const location = useLocation()
   const [totalUnread, setTotalUnread] = useState(0)
+  const [canInstall, setCanInstall] = useState(false)
+  const [showIosHint, setShowIosHint] = useState(false)
+
+  useEffect(() => {
+    if (isStandalone()) return
+    if (getInstallPrompt() || isIos()) setCanInstall(true)
+    const onAvailable = () => setCanInstall(true)
+    window.addEventListener('pwa-install-available', onAvailable)
+    return () => window.removeEventListener('pwa-install-available', onAvailable)
+  }, [])
+
+  async function handleInstall() {
+    if (isIos()) {
+      setShowIosHint(true)
+      return
+    }
+    await triggerInstall()
+    setCanInstall(false)
+  }
 
   const loadUnread = useCallback(async () => {
     try {
@@ -105,14 +125,35 @@ export default function Layout({ children, fullHeight = false }) {
         <main className="flex-1 min-h-0 overflow-y-auto">
           <div className="max-w-5xl mx-auto px-5 py-6">{children}</div>
           <footer className="bg-primary py-6 text-center mt-4">
-            <a
-              href="https://instagram.com/securtiy_group"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-white/70 hover:text-white transition-colors"
-            >
-              By securtiy_group
-            </a>
+            {canInstall && (
+              <button
+                onClick={handleInstall}
+                className="inline-flex items-center gap-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-medium px-3.5 py-1.5 mb-3 transition-colors"
+              >
+                <Download size={13} /> Tətbiqi telefona yüklə
+              </button>
+            )}
+            <div>
+              <a
+                href="https://instagram.com/securtiy_group"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-white/70 hover:text-white transition-colors"
+              >
+                By securtiy_group
+              </a>
+            </div>
+
+            {showIosHint && (
+              <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-6 z-30" onClick={() => setShowIosHint(false)}>
+                <div className="bg-surface rounded-2xl p-5 max-w-xs text-center" onClick={(e) => e.stopPropagation()}>
+                  <p className="text-sm text-ink mb-3">
+                    Safari-də aşağıdakı <strong>Paylaş</strong> düyməsinə bas, sonra <strong>"Ana ekrana əlavə et"</strong> seç.
+                  </p>
+                  <button onClick={() => setShowIosHint(false)} className="text-sm text-primary font-medium">Bağla</button>
+                </div>
+              </div>
+            )}
           </footer>
         </main>
       )}
