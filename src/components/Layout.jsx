@@ -44,24 +44,31 @@ export default function Layout({ children, fullHeight = false }) {
 
   return (
     <div className="h-[100dvh] flex flex-col bg-bg overflow-hidden">
-      <header className="shrink-0 bg-surface border-b border-black/[0.06] z-10">
-        <div className="max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between">
+      <header className="shrink-0 bg-primary z-10 relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-60"
+          style={{
+            background:
+              'radial-gradient(120% 140% at 10% 0%, rgba(255,255,255,0.10), transparent 55%), radial-gradient(90% 120% at 100% 100%, rgba(0,0,0,0.15), transparent 60%)',
+          }}
+        />
+        <div className="relative max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Logo size={26} className="shrink-0" />
-            <div className="w-px h-8 bg-black/[0.06] hidden sm:block" />
-            <Avatar name={employee?.full_name} />
+            <Logo size={26} serpentColor="#ffffff" cupColor="#e8c078" className="shrink-0" />
+            <div className="w-px h-8 bg-white/15 hidden sm:block" />
+            <Avatar name={employee?.full_name} dark />
             <div>
-              <div className="text-[11px] uppercase tracking-wider text-primary font-semibold">
+              <div className="text-[11px] uppercase tracking-wider text-white/70 font-semibold">
                 {ROLE_LABELS[employee?.role] || employee?.role}
               </div>
-              <div className="text-[15px] font-semibold text-ink leading-tight">{employee?.full_name}</div>
+              <div className="text-[15px] font-semibold text-white leading-tight">{employee?.full_name}</div>
             </div>
           </div>
           <div className="flex items-center gap-1 sm:gap-3">
             <Link
               to="/chat"
               className={`relative flex items-center gap-1.5 text-sm rounded-xl p-2.5 transition-colors ${
-                location.pathname === '/chat' ? 'text-primary bg-primary-light' : 'text-ink hover:bg-black/[0.04]'
+                location.pathname === '/chat' ? 'bg-white/20 text-white' : 'text-white/85 hover:bg-white/10'
               }`}
             >
               <MessageCircle size={22} strokeWidth={2} />
@@ -75,7 +82,7 @@ export default function Layout({ children, fullHeight = false }) {
             <Link
               to="/attendance"
               className={`flex items-center gap-1.5 text-sm rounded-xl p-2.5 transition-colors ${
-                location.pathname === '/attendance' ? 'text-primary bg-primary-light' : 'text-ink hover:bg-black/[0.04]'
+                location.pathname === '/attendance' ? 'bg-white/20 text-white' : 'text-white/85 hover:bg-white/10'
               }`}
             >
               <Clock size={22} strokeWidth={2} />
@@ -83,7 +90,7 @@ export default function Layout({ children, fullHeight = false }) {
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 text-sm text-ink rounded-xl p-2.5 hover:bg-danger/10 hover:text-danger transition-colors"
+              className="flex items-center gap-1.5 text-sm text-white/85 rounded-xl p-2.5 hover:bg-white/10 hover:text-white transition-colors"
             >
               <LogOut size={22} strokeWidth={2} />
               <span className="hidden sm:inline">Çıxış</span>
