@@ -17,6 +17,16 @@ export default async function handler(req, res) {
 
   if (error) return res.status(500).json({ error: 'Server xətası.' })
 
+  const todayDateStr = now.toISOString().slice(0, 10)
+  const monthStartDateStr = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)
+
+  const { data: monthExpenses, error: expError } = await supabase
+    .from('finance_entries')
+    .select('amount, entry_date, type')
+    .gte('entry_date', monthStartDateStr)
+
+  if (expError) return res.status(500).json({ error: 'Server xətası.' })
+
   let todayTotal = 0
   let monthTotal = 0
   const perDoctor = {}
@@ -34,9 +44,20 @@ export default async function handler(req, res) {
     if (isToday) perDoctor[key].today += Number(p.amount)
   }
 
+  let todayExpenses = 0
+  let monthExpensesTotal = 0
+  for (const e of monthExpenses) {
+    monthExpensesTotal += Number(e.amount)
+    if (e.entry_date === todayDateStr) todayExpenses += Number(e.amount)
+  }
+
   return res.status(200).json({
     today_total: todayTotal,
     month_total: monthTotal,
+    today_expenses: todayExpenses,
+    month_expenses: monthExpensesTotal,
+    today_net: todayTotal - todayExpenses,
+    month_net: monthTotal - monthExpensesTotal,
     per_doctor: Object.values(perDoctor).sort((a, b) => b.month - a.month),
   })
 }

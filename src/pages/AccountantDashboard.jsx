@@ -1,9 +1,14 @@
 import { useEffect, useState, useCallback } from 'react'
 import { apiRequest } from '../lib/api'
+import { useAuth } from '../context/AuthContext'
 import { Card, Button, EmptyState, StatCard, Avatar, TealCard } from '../components/ui'
-import { Wallet, CalendarClock, FlaskConical } from 'lucide-react'
+import ExpensesPanel from '../components/ExpensesPanel'
+import { Wallet, CalendarClock, FlaskConical, TrendingUp } from 'lucide-react'
 
 export default function AccountantDashboard() {
+  const { employee } = useAuth()
+  const canSeeExpenses = ['director', 'accountant'].includes(employee.role)
+  const [tab, setTab] = useState('kassa')
   const [stats, setStats] = useState(null)
   const [completed, setCompleted] = useState([])
   const [paidApptIds, setPaidApptIds] = useState(new Set())
@@ -39,14 +44,39 @@ export default function AccountantDashboard() {
   const unpaid = completed.filter((a) => !paidApptIds.has(a.id))
   const unpaidLab = labOrders.filter((o) => !paidLabOrderIds.has(o.id))
 
+  if (tab === 'expenses' && canSeeExpenses) {
+    return (
+      <div>
+        <TabRow tab={tab} setTab={setTab} canSeeExpenses={canSeeExpenses} />
+        <ExpensesPanel />
+      </div>
+    )
+  }
+
   return (
     <div>
-      <h1 className="font-display text-xl font-semibold text-ink mb-5">Kassa</h1>
+      <TabRow tab={tab} setTab={setTab} canSeeExpenses={canSeeExpenses} />
 
       {stats && (
-        <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="grid grid-cols-2 gap-3 mb-3">
           <StatCard label="Bugünkü daxilolma" value={`${stats.today_total.toFixed(2)} ₼`} icon={Wallet} />
           <StatCard label="Aylıq daxilolma" value={`${stats.month_total.toFixed(2)} ₼`} icon={CalendarClock} />
+        </div>
+      )}
+      {stats && canSeeExpenses && (
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="rounded-2xl border border-black/[0.06] bg-surface p-4">
+            <div className="text-xs font-medium uppercase tracking-wide text-ink/60 mb-1">Aylıq xərc</div>
+            <div className="font-display text-xl font-semibold text-danger tabular-nums">-{stats.month_expenses.toFixed(2)} ₼</div>
+          </div>
+          <div className="rounded-2xl border border-black/[0.06] bg-surface p-4">
+            <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-ink/60 mb-1">
+              <TrendingUp size={13} /> Aylıq xalis qazanc
+            </div>
+            <div className={`font-display text-xl font-semibold tabular-nums ${stats.month_net >= 0 ? 'text-success' : 'text-danger'}`}>
+              {stats.month_net.toFixed(2)} ₼
+            </div>
+          </div>
         </div>
       )}
 
@@ -139,6 +169,29 @@ export default function AccountantDashboard() {
         />
       )}
     </div>
+  )
+}
+
+function TabRow({ tab, setTab, canSeeExpenses }) {
+  if (!canSeeExpenses) return null
+  return (
+    <div className="flex gap-2 mb-6">
+      <TabChip active={tab === 'kassa'} onClick={() => setTab('kassa')}>Kassa</TabChip>
+      <TabChip active={tab === 'expenses'} onClick={() => setTab('expenses')}>Xərclər</TabChip>
+    </div>
+  )
+}
+
+function TabChip({ active, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+        active ? 'bg-primary text-white' : 'bg-surface text-ink/70 border border-black/10'
+      }`}
+    >
+      {children}
+    </button>
   )
 }
 

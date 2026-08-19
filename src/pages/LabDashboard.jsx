@@ -51,12 +51,16 @@ export default function LabDashboard() {
 function LabOrderDetail({ order, onBack }) {
   const [results, setResults] = useState(order.results || '')
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
 
   async function complete() {
     setSaving(true)
+    setError(null)
     try {
       await apiRequest(`/lab-orders/${order.id}`, { method: 'PATCH', body: { results, status: 'completed' } })
       onBack()
+    } catch (e) {
+      setError(e.message)
     } finally {
       setSaving(false)
     }
@@ -92,6 +96,7 @@ function LabOrderDetail({ order, onBack }) {
         />
       </Card>
 
+      {error && <p className="text-danger text-sm mb-3">{error}</p>}
       <Button onClick={complete} disabled={saving || !results.trim()} className="w-full py-3">
         {saving ? 'Yadda saxlanılır…' : 'Nəticəni yadda saxla və həkimə göndər'}
       </Button>

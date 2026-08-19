@@ -9,7 +9,7 @@ import AttendanceAdmin from '../components/AttendanceAdmin'
 import LabOverview from '../components/LabOverview'
 import PersonnelOrders from '../components/PersonnelOrders'
 import AccountantDashboard from './AccountantDashboard'
-import { Wallet, CalendarClock, Users, Stethoscope } from 'lucide-react'
+import { Wallet, CalendarClock, Users, Stethoscope, TrendingUp } from 'lucide-react'
 
 export default function AdminDashboard() {
   const { employee } = useAuth()
@@ -80,6 +80,16 @@ function StatsView({ onSelectDoctor }) {
         <StatCard label="Bugünkü dövriyyə" value={`${stats ? stats.today_total.toFixed(2) : '—'} ₼`} icon={Wallet} />
         <StatCard label="Aylıq dövriyyə" value={`${stats ? stats.month_total.toFixed(2) : '—'} ₼`} icon={CalendarClock} />
         <StatCard label="Aktiv əməkdaş" value={employeeCount ?? '—'} icon={Users} />
+        {stats && (
+          <div className="relative overflow-hidden rounded-2xl bg-white text-ink p-5 border border-black/[0.06]">
+            <TrendingUp size={18} className={`absolute top-5 right-5 ${stats.month_net >= 0 ? 'text-success/40' : 'text-danger/40'}`} strokeWidth={1.75} />
+            <div className="text-xs font-medium uppercase tracking-wide text-ink/60 mb-2">Xalis qazanc (ay)</div>
+            <div className={`font-display text-3xl font-semibold tabular-nums ${stats.month_net >= 0 ? 'text-success' : 'text-danger'}`}>
+              {stats.month_net.toFixed(2)} ₼
+            </div>
+            <div className="text-xs text-ink/60 mt-1">xərc: -{stats.month_expenses.toFixed(2)} ₼</div>
+          </div>
+        )}
       </div>
 
       <h2 className="font-display text-lg font-semibold text-ink mb-3">Həkim üzrə dövriyyə (bu ay)</h2>

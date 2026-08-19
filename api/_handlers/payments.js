@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
     let query = supabase
       .from('payments')
-      .select('id, amount, type, payment_method, created_at, patient:patients(full_name), doctor:employees!payments_doctor_id_fkey(id, full_name)')
+      .select('id, amount, type, appointment_id, lab_order_id, payment_method, created_at, patient:patients(full_name), doctor:employees!payments_doctor_id_fkey(id, full_name)')
       .order('created_at', { ascending: false })
 
     if (session.role === 'doctor') {
