@@ -53,7 +53,7 @@ export default function Kiosk() {
     <div className="min-h-screen bg-bg p-6">
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8 pt-6">
-          <Logo size={48} className="mx-auto mb-3" />
+          <Logo size={84} className="mx-auto mb-3" />
           <div className="text-xs tracking-[0.2em] uppercase text-primary font-semibold mb-2">Klinika CRM</div>
           <h1 className="font-display text-2xl font-semibold text-ink">Davamiyyət</h1>
           <p className="text-sm text-ink/65 mt-1">Adını seç və PIN-lə təsdiqlə</p>

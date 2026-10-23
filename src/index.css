@@ -44,6 +44,33 @@ body {
   animation: fade-in 0.2s ease-out;
 }
 
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2.5px); }
+}
+@keyframes logo-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+@keyframes logo-tongue {
+  0%, 84%, 100% { transform: scaleX(1); }
+  90% { transform: scaleX(1.4); }
+  95% { transform: scaleX(0.8); }
+}
+.logo-3d {
+  overflow: visible;
+  animation: logo-float 5s ease-in-out infinite;
+}
+.logo-glow {
+  animation: logo-glow 3.2s ease-in-out infinite;
+}
+.logo-tongue {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: logo-tongue 4.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in { animation: none; }
+  .logo-3d, .logo-glow, .logo-tongue { animation: none; }
 }

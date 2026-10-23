@@ -68,7 +68,7 @@ export default function Login() {
         </svg>
 
         <div className="relative">
-          <Logo size={44} serpentColor="#ffffff" cupColor="#e8c078" className="mb-5" />
+          <Logo size={96} serpentColor="#ffffff" cupColor="#e8c078" className="mb-5" />
           <div className="text-sm tracking-[0.2em] uppercase text-white/60">Klinika CRM</div>
           <h1 className="font-display mt-6 text-4xl md:text-[2.75rem] font-medium leading-[1.1]">
             Qəbuldan direktora,
