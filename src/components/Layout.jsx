@@ -135,7 +135,7 @@ export default function Layout({ children, fullHeight = false }) {
             )}
             <div>
               <a
-                href="https://instagram.com/securtiy_group"
+                href="https://aze-ai.az"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-white/70 hover:text-white transition-colors"

@@ -127,7 +127,7 @@ export default function Login() {
           </p>
 
           <a
-            href="https://instagram.com/securtiy_group"
+            href="https://aze-ai.az"
             target="_blank"
             rel="noopener noreferrer"
             className="block text-center text-xs text-ink/50 hover:text-ink/65 transition-colors mt-10"
